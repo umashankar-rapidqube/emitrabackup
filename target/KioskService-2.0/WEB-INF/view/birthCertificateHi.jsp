@@ -152,14 +152,17 @@
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
 	<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 	<script type="text/javascript">
 				$(function() {
 					var id ="${subServiceID}";
-					if(id==300){
+					if(id=='DES300'){
 						$("#serviceName").html("जन्म");	
-					}else if(id==400){
+					}else if(id=='DES400'){
 						$("#serviceName").html("मृत्यु");
-					}else if(id==500){
+					}else if(id=='DES500'){
 						$("#serviceName").html("विवाह पंजीकरण");
 					}
 					

@@ -25,7 +25,7 @@ public class VedioConference {
 			/*e1.printStackTrace();*/
 		}
 
-		logger.info("vc file path :: " + vc_filePath);
+		logger.debug("vc file path :: " + vc_filePath);
 		String[] cmd = { "cmd.exe", "/c", "Start", vc_filePath };
 
 		try {
@@ -50,7 +50,7 @@ public class VedioConference {
 			/*e1.printStackTrace();*/
 		}
 
-		logger.info("VedioConference File Path :: " + vc_filePath);
+		logger.debug("VedioConference File Path :: " + vc_filePath);
 		String[] cmd = { "cmd.exe", "/c", "Start", vc_filePath };
 		try {
 			Runtime.getRuntime().exec(cmd);
@@ -62,7 +62,7 @@ public class VedioConference {
 
 	public void updateKioskHeathFile(String statusvalue, String nodeValue) {
 		try {
-			logger.info("nodeValue : " + nodeValue + " statusvalue :" + statusvalue);
+			logger.debug("nodeValue : " + nodeValue + " statusvalue :" + statusvalue);
 
 			File file = new File(filename);
 			file.getParentFile().mkdirs(); // Will create parent directories for the file, if not exists

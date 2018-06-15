@@ -60,7 +60,7 @@
                                 <div class="row">
                                
                                     <div class="billmidmain">
-                                        <h1>Please enter your detail for Printing Certificate </h1>
+                                        <h1>Please enter your detail for viewing/printing ${serviceName}  </h1>
                                          <form id="certificate_details">
                                         <div class="feildone" style="text-align:center">
                                             <div class="col-md-6 col-md-offset-3">
@@ -120,6 +120,9 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
   	<script type="text/javascript">
   	$(function() {
 		$("#checkForm").on('click',function() {

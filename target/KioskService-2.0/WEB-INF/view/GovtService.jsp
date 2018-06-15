@@ -121,6 +121,9 @@
      <script type="text/javascript"  src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.print.min.js"></script>
     
      
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+     
 
  
     <script type="text/javascript">

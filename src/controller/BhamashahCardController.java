@@ -191,7 +191,7 @@ public class BhamashahCardController {
 						resObj.put("updateCount", 0);
 //						org.json.JSONObject receiptData = (org.json.JSONObject)resObj.get("statusOfTransaction");
 						String consumerKey = getConsumerKey(receiptData);
-						receiptData.put("consumerKey" , consumerKey);
+						receiptData.put("consumerKey" , consumerKey);	
 						ReceiptPrint.printReciept(request , receiptData , "certificate");
 					}
 					
@@ -372,7 +372,7 @@ public class BhamashahCardController {
 			String decriptCancelTranscationUrl = null;
 			try {
 				decriptCancelTranscationUrl = eds.sendPostForDecryptData(cancelTranscationResponse);
-				logger.info("cancelTranscation, decriptCancelTranscationUrl :"+decriptCancelTranscationUrl);
+				logger.debug("cancelTranscation, decriptCancelTranscationUrl :"+decriptCancelTranscationUrl);
 				
 				if(decriptCancelTranscationUrl!=null && !decriptCancelTranscationUrl.equals("")) {
 			        billService.saveCancelTranscationurl(decriptCancelTranscationUrl);

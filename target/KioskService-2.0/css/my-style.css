@@ -708,7 +708,7 @@ img.a {
     border-radius: 5px !important;*/
     width: 95% !important;
     margin: 0 auto !important;
-    background: #FFF !important;
+    background: transparent !important;
     padding: 5px 0px !important;
     border-radius: 5px !important;
 }
@@ -1312,7 +1312,7 @@ a:focus, a:hover {
 
 .gsall .deg180 {
      transform: rotate(180deg) translate(0px) rotate(-180deg);
-    margin: -220px 0px 0px 694px;
+    margin: -240px 0px 0px 801px;
 }
 
 .gsall .deg60 {
@@ -1325,24 +1325,35 @@ a:focus, a:hover {
     margin: -16px 0px 0px 120px;
 }
 
+.gs .deg30{
+
+transform: rotate(0deg) translate(0px) rotate(-0deg);
+    margin: 0px 0px 0px 0px;
+    left: 37%;
+}
+
+
 .gs .deg0 {
-    transform: rotate(0deg) translate(0px) rotate(-0deg);
-    margin: 100px 0px 0px 0px;
+           transform: rotate(0deg) translate(0px) rotate(-0deg);
+    margin: 66px 0px 0px 0px;
 }
 
 .gs .deg180 {
-    transform: rotate(180deg) translate(0px) rotate(-180deg);
-    margin: 100px 0px 0px 0px;
+       transform: rotate(180deg) translate(0px) rotate(-180deg);
+    margin: -270px 0px 0px 801px;
 }
 
 .gs .deg60 {
-    transform: rotate(60deg) translate(-59px) rotate(-60deg);
-    margin: 60px 0px 0px 0px;
+       transform: rotate(60deg) translate(-240px) rotate(-60deg);
+    margin: 90px 0px 0px 0px;
 }
 
+.gs .deg60 .grevanceservices {    background: transparent;}
+
+
 .gs .deg90 {
-    transform: rotate(90deg) translate(-89px) rotate(-90deg);
-    margin: 93px 0px 0px 0px;
+       transform: rotate(90deg) translate(-89px) rotate(-90deg);
+    margin: -16px 0px 0px 120px;
 }
 
 .gs .grevanceservices img {
@@ -1682,4 +1693,88 @@ a:focus, a:hover {
 .billmidmain h5{
 	font-size:18px;
 }
+
+
+
+
+
+.allcir .oneservices {
+    width: 80%;
+}
+
+
+.allcir .grevanceservices span {
+    text-align: center;
+    font-size: 16px;}
+
+    .allcir .oneservices h2 {
+        font-size: 16px;
+        margin: 10px 0 0 0;
+    }
+
+    .allcir .oneservices img {
+        width: 50%;
+    }
+
+
+
+.allcir .grevanceservices {
+    background: transparent;}
+
+.allcir .deg0 {
+    transform: rotate(0deg) translate(140px) rotate(-0deg);
+    margin: 50px 0px 0px -95px;
+}
+
+
+.allcir .deg20 {
+    transform: rotate(0deg) translate(72px) rotate(0deg);
+    margin: 0px 0px 0px -25px;
+}
+
+
+.allcir .deg40 {
+    transform: rotate(0deg) translate(-99px, -22px) rotate(0deg);
+    margin: 0px 0px 0px 120px;
+}
+
+.allcir .deg60 {
+    transform:rotate(0deg) translate(9px, -2px) rotate(0deg);
+    margin: 50px 0px 0px 0px;
+}
+
+.allcir .deg80 {
+    transform:rotate(80deg) translate(-25px, 0px) rotate(-80deg);
+    margin: 0px 0px 0px 0px;
+}
+
+.allcir .deg100 {
+    transform: rotate(100deg) translate(-367px ,-428px) rotate(-100deg);
+    margin: 50px 0px 0px -85px;
+}
+
+.allcir .deg120 {
+       transform: rotate(80deg) translate(45px, 536px) rotate(-80deg);
+    margin: 0px 0px 0px 45px;
+}
+
+.allcir .deg140 {
+    transform: rotate(0deg) translate(42px, -36px) rotate(-0deg);
+    margin: 0px 0px 0px 10px;
+}
+
+.allcir .deg180 {
+    transform:rotate(0deg) translate(373px,50px) rotate(-0deg);
+    margin: -98px 0px 0px 0px;
+}
+
+
+
+.allcir .circle-container {
+    padding-top: 20px;
+}
+
+
+
+
 

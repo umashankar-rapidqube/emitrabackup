@@ -57,6 +57,12 @@
 							</div>
 						</div>
 					</div>
+					
+					<form id="spd1">
+						<input type="hidden" name="langCode" id="langCode" value="1">
+						<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+					</form>
+					
 					<div class="fourservices">
 						<div class="innermid">
 							<div class="container main_row">
@@ -77,7 +83,7 @@
 											<th>खसरा क्षेत्र</th>
 											<th>मिट्टी का नाम</th>
 											<th>मिट्टी क्षेत्र</th>
-											<th>मिट्टी Rev</th>
+											<th>मिट्टी रेव</th>
 											<th>मिट्टी की दर</th>
 											<th>क्षेत्र इकाई</th>
 											<th>खसरा सिंचाई</th>
@@ -119,7 +125,9 @@
 
 
 							<div class="button_div">
-								<a href="jamabandiRecordHi" class="panel"> <img src="img/new/backhindi.png"></a>
+								<a href="javascript:void(0);" onclick="getSP1('JamabandiHi')" class="panel">
+									<img src="img/new/backhindi.png">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -133,6 +141,16 @@
 	<script type="text/javascript" src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
 	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
+	<script type="text/javascript">
+		function getSP1(pageName) {
+	    	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd1").action = "jamabandiRecord";
+			document.getElementById("spd1").method = "post";
+			$("#spd1").submit();
+		}
+	</script>
 
 </body>
 

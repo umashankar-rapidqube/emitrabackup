@@ -63,7 +63,7 @@
 							<div class="container main_row">
 								<div class="row">
 									<div class="billmidmain">
-										<h1 class="">Your DISCOM Details Are </h1>
+										<h1 class="">YOUR ${infobill.serviceProviderName} DETAILS</h1>
 									    <div style="overflow-x:auto;">
 										<table class="table">
 											<thead>
@@ -72,7 +72,6 @@
 													<th>Name</th>
 													<th>ChequeDueDate</th>
 													<th>BillYear</th>
-													<th>Message</th>
 													<th>BillNo</th>
 													<th>Account</th>
 													<th>BillMonth</th>
@@ -92,7 +91,6 @@
 													<td >${fm.name}</td>
 													<td >${fm.chequeDueDate}</td>
 													<td >${fm.billYear}</td>
-													<td >${fm.message}</td>
 													<td >${fm.billNo}</td>
 													<td >${fm.account_number}</td>
 													<td >${fm.billMonth}</td>
@@ -108,6 +106,10 @@
 
 											</tbody>
 										</table>
+										<form id="spd">
+											<input type="hidden" id="serviceProviderID1" name="serviceProviderID" value="${infobill.serviceProviderID}" >
+											<input type="hidden" id="serviceProviderName1" name="serviceProviderName" value="${infobill.serviceProviderName}" >
+										</form>
 									    <form id="click">
 											<input type="hidden" id="billActualAmount" name="billActualAmount"  value="${infobill.billActualAmount}">
 											<input type="hidden" id="billAmount" name="billAmount" value="${infobill.billAmount}" >
@@ -146,7 +148,7 @@
 								
 							</div>
 							 <div class="button_div">
-                                <a href="index" class="panel">
+                                <a href="javascript:void(0);" onclick="getSP('discom')" >
                                     <img src="img/new/back.png" alt=""></a>
                             </div>
 						</div>
@@ -162,9 +164,17 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	  <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
 	  <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	  
 
 	
     <script>
+	    function getSP(pageName) {
+			document.getElementById("spd").action = "discom";
+			document.getElementById("spd").method = "post";
+			$("#spd").submit();
+		}
 		function clicktopay() {
 			$('#loading').show();
 			document.getElementById('click').action = "clickToPay";

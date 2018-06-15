@@ -66,13 +66,14 @@
 									<div class="billmidmain">
 										<h1>Please enter your details for
 											${serviceProvider.serviceProviderName} BILL</h1>
+										<form id="spd">
+	                                    	<input type="hidden" name="langCode" id="langCode1" value="0">
+											<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+										</form>
 										<form id="bill_details">
-											<input type="hidden" name="serviceProviderName"
-												id="serviceProviderName"
-												value="${serviceProvider.serviceProviderName}" /> <input
-												type="hidden" name="serviceProviderID"
-												id="serviceProviderID" value="0" />
-												<input type="hidden" name="langCode" id="langCode" value="0" />
+											<input type="hidden" name="serviceProviderName" id="serviceProviderName" value="${serviceProvider.serviceProviderName}" />
+											<input type="hidden" name="serviceProviderID" id="serviceProviderID" value="0" />
+											<input type="hidden" name="langCode" id="langCode" value="0" />
 											<div class="feildone">
 												<div class="col-md-6">
 													<div class="col-md-4">
@@ -161,8 +162,8 @@
 								</div>
 							</div>
 							<div class="button_div">
-								<a href="serviceprovider"> <img
-									src="img/new/back.png" alt="" />
+								<a href="javascript:void(0);" onclick="getSP('Bill_Postpaid')" >
+									<img src="img/new/back.png" alt="" />
 								</a>
 							</div>
 						</div>
@@ -183,9 +184,18 @@
 	<script type="text/javascript" src="js/app.js"></script>
 	<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 
 	<script type="text/javascript">
-	
+		
+		function getSP(pageName) {
+	    	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd").action = "utilityBills";
+			document.getElementById("spd").method = "post";
+			$("#spd").submit();
+		}
+		
 		 $("#bsnlType").change(function(){
 	     	var bsnlType = this.value;	   
 			if(bsnlType == "landline"){						
@@ -208,8 +218,6 @@
 			$("#serviceBill").on('click',function() {
 				$("#serviceProviderID").val("${serviceId}");
 				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-				//	alert("serviceId  :: "+$("#serviceProviderID").val());
-				//	alert("billMobileNo : "+$("#billMobileNo").val()+" billEmail : "+$("#billEmail").val());
 				var contact = $.trim($("#billMobileNo").val());
 				var emailid = $.trim($("#billEmail").val());
 				var bsnlType = $('#bsnlType :selected').val();
@@ -223,51 +231,15 @@
 						return false;
 					}
 				}
-				if(bsnlType == "landline"){		
-					if (contact == '') {
-						$("#errMobile").html('<p style="color:red; font-size:13px;float: left;">* Enter Landline no.</p>');
-						$("#billMobileNo").focus();
-						//setTimeout(function(){$("#errMobile").html('')}, 3000);
-						return false;
-					}
-					if (contact != '') {
-						if (!$.isNumeric(contact)) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* Enter valid landline number</span>");
-							return false;
-						} else if (contact.length != 10) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* Enter valid 10 digits landline number.</span>");
-							return false;					
-						}
-					}
-				}else{
-					if (contact == '') {
-						$("#errMobile").html('<p style="color:red;float: left; font-size:13px;float: left;">* Enter mobile no.</p>');
-						$("#billMobileNo").focus();
-						//setTimeout(function(){$("#errMobile").html('')}, 3000);
-						return false;
-					}
-					if (contact != '') {
-						if (!$.isNumeric(contact)) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* Enter valid contact number</span>");
-							return false;
-						} else if (contact.length != 10) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* Enter valid 10 digits contact number.</span>");
-							return false;					
-						}
-					}
+				
+				var bsnlTypeMsg = bsnlType=="landline"?"landline":"mobile";
+				
+				if(!validate(contact, bsnlTypeMsg)){
+					$("#billMobileNo").focus();
+					return false;
 				}
 				
-
-				
-				
 				if (emailid == '') {
-					/* $("#billEmail").focus();
-					$("#errEmail").html("<span style='color:red'>* Enter Email ID</span>");
-					return false; */
 					$("#billEmail").val('helpdesk.emitra@rajasthan.gov.in');
 				}
 				
@@ -277,6 +249,23 @@
 				$("#bill_details").submit();
 			})
 		});
+		
+		function validate(contact, msg){
+			 if (contact == '') {
+				$("#errMobile").html('<p style="color:red;float: left; font-size:13px;float: left;">* Enter '+msg+' no.</p>');
+				return false;
+			}
+			if (contact != '') {
+				if (!$.isNumeric(contact)) {
+					$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* Enter valid "+msg+" number</span>");
+					return false;
+				} else if (contact.length != 10) {
+					$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* Enter valid 10 digits "+msg+" number.</span>");
+					return false;					
+				}
+			}
+			return true;
+		}
 	</script>
 
 

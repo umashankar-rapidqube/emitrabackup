@@ -62,9 +62,10 @@
 								<div class="row">
 									<div class="billmidmain">
 										<h1 class="">आपका भुगतान सफलतापूर्वक किया गया है|</h1>
-									        <c:set var="tid" value="${tid}"/>
+									       <%--  <c:set var="tid" value="${tid}"/>
 									        <c:set var="receipt" value="${rECEIPTNO}"/>
-									         <c:set var="tdate" value="${tdate}"/>
+									         <c:set var="tdate" value="${tdate}"/> --%>
+									         <input id="transID" value="${transID}" type="hidden"/>
 										<table class="table">
 											<thead>
 												<tr>
@@ -116,12 +117,13 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
  
  <script>
  
-	function csd()
-	{
-		var id=document.getElementById('name11').innerHTML;
+	function csd() {
+		/* var id=document.getElementById('name11').innerHTML;
 		var id1=document.getElementById('bill11').innerHTML;
 		var id2="${tid}";
 		var id3=document.getElementById('email11').innerHTML;
@@ -130,8 +132,9 @@
 		var id6=document.getElementById('payable').innerHTML;
 		var id7="${tdate}";
 		var id8=document.getElementById('payment').innerHTML;
+		var bankRefNumber ="${bankRefNumber}";
 		var dataString='name='+id+'&billMobileNo='+id1+'&transactionId='+id2
-        +'&billEmail='+id3+'&serviceProviderName='+id4+'&billActualAmount='+id5+'&billAmount='+id6+'&transcationDate='+id7+'&paymentMode='+id8;
+        +'&billEmail='+id3+'&serviceProviderName='+id4+'&billActualAmount='+id5+'&billAmount='+id6+'&transcationDate='+id7+'&paymentMode='+id8+'&bankRefNumber='+bankRefNumber;
 		$.ajax({
 			type:'POST',
 			data:dataString,
@@ -139,12 +142,27 @@
 			success:function(data){
 				
 			}
-		})
+		}) */
+		
+		printReceipt();
+	}
+	
+	function printReceipt(){
+		var transId = $('#transID').val();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var status = this.responseText;
+				console.log(status);
+			}
+		};
+		xhttp.open("POST", "receiptPrint?transId="+transId, true);
+		xhttp.send();
 	}
 	
 	function csd1()
 	{
-		document.getElementById('xyz').action="hello11";
+		document.getElementById('xyz').action="retruntoindex";
 		document.getElementById('xyz').method="POST";
 		document.getElementById('xyz').submit();
 	}

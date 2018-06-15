@@ -23,9 +23,7 @@
 
  <div id="wrapper">
         <div id="mask">
-
-
-  <div id="fill" class="item gr gs">
+  			<div id="fill" class="item allcir">
                 <div class="content">
                     <!--<a href="#item1" class="panel">back</a>-->
                     <div class="mainone innermaintop">
@@ -59,6 +57,11 @@
 						<input type="hidden" name="serviceID" id="serviceID" /> <input
 							type="hidden" name="subServiceID" id="subServiceID" /> <input
 							type="hidden" name="serviceName" id="serviceName" />
+							<input type="hidden" name="langCode" id="langCode" value="0" />
+					</form>
+					<form id="spd1">
+						<input type="hidden" name="langCode" id="langCode" value="0" />
+						<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
 					</form>
 					<input type="hidden" value="${serviceID}" id="srvID" />
 					
@@ -69,88 +72,96 @@
 									<div class="billmidmain">
 										<h1 class="">Certificate Services</h1>
 
-										<!-- <div class="col-md-3 deg0">
-                                                <div class="grevanceservices">
-                                                <a href="governmentservices12" class="panel">
-                                                    <img src="img/print.png" alt="" />
-                                                    <span>Domicile Certificate</span>
-                                                </a>
-                                                    </div>
-                                            </div>
-
-                                           <div class="col-md-3 deg60">
-                                                <div class="grevanceservices">
-                                                 <a href="birthservice" class="panel"> 
-                                                    <img src="img/birth.png" alt="" />
-                                                    <span>Birth Certificate</span>
-                                                </a>
-                                                    </div>
-                                            </div>
-                                            <div class="col-md-3 deg90">
-                                                <div class="grevanceservices">
-                                                <a href="deathservice" class="panel">
-                                                    <img src="img/death.png" alt="" />
-                                                    <span>Death Certificate</span>
-                                                </a>
-                                                    </div>
-                                            </div>
-                                            <div class="col-md-3 deg180">
-                                                <div class="grevanceservices">
-                                                <a href="marriageservice" class="panel">
-                                                <a href="#" class="panel">
-                                                    <img src="img/marriage.png" alt="" />
-
-                                                    <span>Marriage Certificate</span>
-                                                </a>
-                                                    </div>
-                                    		</div> -->
-
-
 										<div class="col-md-3 deg0">
 											<div class="grevanceservices">
 												<a href="javascript:void(0);"
-													onclick="setSSId('100','Bonafide Certificate')"
+													onclick="setSSId('200','Caste Certificate')"
+													class="panel"> <img src="img/caste.png" alt="" /> 
+													<span>Caste Certificate</span>
+												</a>
+											</div>
+										</div>
+										
+										<div class="col-md-3 deg20">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('100','Domicile/Minority/General Certificate')"
 													class="panel"> <img src="img/print.png" alt="" /> 
-													<span>Domicile, Caste, Minority, General Certificates etc...</span>
+													<span>Domicile, Minority, General Certificates etc...</span>
+												</a>
+											</div>
+										</div>
+										
+										<div class="col-md-3 deg40">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('1003','Birth Certificate')" class="panel">
+													<img src="img/birth.png" alt="" /> <span>Birth
+														Certificate</span>
 												</a>
 											</div>
 										</div>
 										<div class="col-md-3 deg60">
 											<div class="grevanceservices">
 												<a href="javascript:void(0);"
-													onclick="setSSId('300','Birth Certificate')" class="panel">
-													<img src="img/birth.png" alt="" /> <span>Birth
-														Certificate</span>
-												</a>
-											</div>
-										</div>
-										<div class="col-md-3 deg90">
-											<div class="grevanceservices">
-												<a href="javascript:void(0);"
-													onclick="setSSId('400','Death Certificate')" class="panel">
+													onclick="setSSId('1001','Death Certificate')" class="panel">
 													<img src="img/death.png" alt="" /> <span>Death
 														Certificate</span>
 												</a>
 											</div>
 										</div>
-										<div class="col-md-3 deg180">
+										<div class="col-md-3 deg80">
 											<div class="grevanceservices">
 												<a href="javascript:void(0);"
-													onclick="setSSId('500','Marriage Certificate')"
+													onclick="setSSId('1004','Marriage Certificate')"
 													class="panel"> <img src="img/marriage.png" alt="" /> <span>Marriage Registration
 														Certificate</span>
 												</a>
 											</div>
 										</div>
 										
+										<div class="col-md-3 deg100">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('1002','Disability Certificate')"
+													class="panel"> <img src="img/disability.png" alt="" /> <span>Disability Certificate</span>
+												</a>
+											</div>
+										</div>
+										<!-- <div class="col-md-3 deg120">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('1002','Disability Certificate')"
+													class="panel"> <img src="img/marriage.png" alt="" /> <span>Disability Certificate</span>
+												</a>
+											</div>
+										</div>
+										<div class="col-md-3 deg140">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('1002','Disability Certificate')"
+													class="panel"> <img src="img/marriage.png" alt="" /> <span>Disability Certificate</span>
+												</a>
+											</div>
+										</div>
+									
+										<div class="col-md-3 deg180">
+											<div class="grevanceservices">
+												<a href="javascript:void(0);"
+													onclick="setSSId('1002','Disability Certificate')"
+													class="panel"> <img src="img/marriage.png" alt="" /> <span>Disability Certificate</span>
+												</a>
+											</div>
+										</div> -->
 									</div>
 
 								</div>
                          
                             </div>
                             <div class="button_div">
-                                <a href="governmentServiceProvider" class="panel">
-                                    <img src="img/new/back.png" alt=""/></a>
+                                <a href="javascript:void(0);" onclick="getSP('GovernmentServiceProvider')" class="panel">
+									<img src="img/new/back.png" alt="" />
+								</a>
                             </div>
                         </div>
                     </div>
@@ -162,33 +173,49 @@
     <script type="text/javascript"  src="js/bootstrap.min.js"></script>
     <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
   	<script >
     function setSSId(id,name) {
-		var sID=$("#srvID").val();
-		$("#serviceID").val(sID);
+		
 		$("#subServiceID").val(id);
 		$("#serviceName").val(name);
-		if(id==300){
-			document.getElementById("SubSerId").action = "birthservice";
-			document.getElementById("SubSerId").method = "post";
-			$("#SubSerId").submit();	
-		}
-		else if(id==100){
-			document.getElementById("SubSerId").action = "governmentservices12";
-			document.getElementById("SubSerId").method = "post";
-			$("#SubSerId").submit();
+		switch(id){
+			case "1003":
+				submitForm("birthservice");
+				break;
+			case "100":
+			case "200":
+				submitForm("governmentservices12");
+				break;
+			case "1001":
+				submitForm("deathservice");
+				break;
+			case "1004":
+				submitForm("marriageservice");
+				break;
+			case "1002":
+				submitForm("disabilityCertificate");
+				break;
+			
 		}
 		
-		else if(id==400){
-			document.getElementById("SubSerId").action = "deathservice";
-			document.getElementById("SubSerId").method = "post";
-			$("#SubSerId").submit();
-		}
-		else if(id==500){
-			document.getElementById("SubSerId").action = "marriageservice";
-			document.getElementById("SubSerId").method = "post";
-			$("#SubSerId").submit();
-		}
+	}
+    
+	function submitForm(action){
+		$("#serviceID").val($("#srvID").val());
+    	document.getElementById("SubSerId").action = action;
+		document.getElementById("SubSerId").method = "post";
+		$("#SubSerId").submit();
+    	
+    }
+	
+	function getSP(pageName) {
+		$("#serviceProviderPage").val(pageName);
+		document.getElementById("spd1").action = "utilityBills";
+		document.getElementById("spd1").method = "post";
+		document.getElementById('spd1').submit();
 	}
     </script>
 

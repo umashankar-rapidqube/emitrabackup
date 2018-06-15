@@ -47,7 +47,8 @@ public class AadharServices {
 
     static final Logger log = Logger.getLogger(AadharServices.class);
     BufferedReader rd;
-    
+    final int MAX_SIZE = 200000;
+        
 	public Map<String, Object> aadharOtpGeneration(String aadharId , String requestUrl) {
 		// TODO Auto-generated method stub
 		String docXml = getXmlForAadharOtpGen(String.valueOf(aadharId));
@@ -139,7 +140,7 @@ public class AadharServices {
 				post.setHeader("Content-Type", "application/xml");
 				HttpResponse resp = client.execute((HttpUriRequest) post);
 				
-				rd = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
+				rd = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()),MAX_SIZE);
 				
 				/*String line;
 				while ((line = rd.readLine()) != null) {

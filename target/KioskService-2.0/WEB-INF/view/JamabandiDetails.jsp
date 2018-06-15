@@ -57,6 +57,12 @@
 							</div>
 						</div>
 					</div>
+					
+					<form id="spd1">
+						<input type="hidden" name="langCode" id="langCode" value="0">
+						<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+					</form>
+					
 					<div class="fourservices">
 						<div class="innermid">
 							<div class="container main_row">
@@ -122,7 +128,9 @@
 
 
 							<div class="button_div">
-								<a href="jamabandiRecord" class="panel"> <img src="img/new/back.png"></a>
+								<a href="javascript:void(0);" onclick="getSP1('Jamabandi')" class="panel">
+									<img src="img/new/back.png">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -135,7 +143,17 @@
 	  <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
 	 <script type="text/javascript" src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 	 <script type="text/javascript" src="js/app-inner.js"></script>
-
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	 
+	<script type="text/javascript">
+		function getSP1(pageName) {
+	    	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd1").action = "jamabandiRecord";
+			document.getElementById("spd1").method = "post";
+			$("#spd1").submit();
+		}
+	</script>
 
 </body>
 

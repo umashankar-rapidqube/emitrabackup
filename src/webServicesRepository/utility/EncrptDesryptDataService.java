@@ -18,7 +18,10 @@ public class EncrptDesryptDataService {
 	static final Logger logger = Logger.getLogger(EncrptDesryptDataService.class);
 
 	BufferedReader in;
+	DataOutputStream wr;
 	
+	final int MAX_SIZE = 200000;
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -87,41 +90,38 @@ public class EncrptDesryptDataService {
 			String urlParameters = "toBeCheckSumString=" + checkSum;
 
 			con.setDoOutput(true);
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+			wr = new DataOutputStream(con.getOutputStream());
 			wr.writeBytes(urlParameters);
 			wr.flush();
-			wr.close();
+			// wr.close();
 
 			int responseCode = con.getResponseCode();
-			logger.info("getCheckSUM, Response Code : " + responseCode);
+			logger.debug("getCheckSUM, Response Code : " + responseCode);
 			if (responseCode == 200) {
-				/*BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-*/
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				/*
+				 * BufferedReader in = new BufferedReader(new
+				 * InputStreamReader(con.getInputStream())); String inputLine;
+				 * 
+				 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
+				 * in.close();
+				 */
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()), MAX_SIZE);
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					response.append(inputLine);
-				}					
+				}
 			}
 		} catch (Exception e) {
 			logger.error("EncrptDesryptDataService, Exception in getCheckSUM : " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			in.close();
-			}
-			catch (IOException e) {
+				wr.close();
+				in.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
-		}
-	
+
 		return response.toString();
 	}
 
@@ -258,43 +258,41 @@ public class EncrptDesryptDataService {
 			con.setDoOutput(true);
 
 			if (!"sendPostForJamabandiData".equalsIgnoreCase(methodName)) {
-				DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+				wr = new DataOutputStream(con.getOutputStream());
 				wr.writeBytes(urlParameters);
 				wr.flush();
-				wr.close();
+				//wr.close();
 			}
 
 			int responseCode = con.getResponseCode();
-			logger.info(methodName + ", Post parameters : " + urlParameters);
-			logger.info(methodName + ", Response Code : " + responseCode);
+			logger.debug(methodName + ", Post parameters : " + urlParameters);
+			logger.debug(methodName + ", Response Code : " + responseCode);
 			if (responseCode == 200) {
-				/*BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();*/				
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				/*
+				 * BufferedReader in = new BufferedReader(new
+				 * InputStreamReader(con.getInputStream())); String inputLine;
+				 * 
+				 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
+				 * in.close();
+				 */
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()), MAX_SIZE);
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					response.append(inputLine);
 				}
-				
+
 			}
 			res = response.toString();
 
 		} catch (Exception e) {
 			logger.error("EncrptDesryptDataService : Exception in " + methodName + " : " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			in.close();
-			}
-			catch (IOException e) {
+				wr.close();
+				in.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
-		}
+			}
 		}
 
 		return res;
@@ -310,21 +308,20 @@ public class EncrptDesryptDataService {
 			con.setRequestProperty("User-Agent", USER_AGENT);
 
 			int responseCode = con.getResponseCode();
-			logger.info(methodName + " Response Code : " + responseCode);
+			logger.debug(methodName + " Response Code : " + responseCode);
 			if (responseCode == 200) {
 
-				/*BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
-
-				response = new StringBuffer();
-
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-
-				in.close();
-*/
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				/*
+				 * BufferedReader in = new BufferedReader(new
+				 * InputStreamReader(con.getInputStream())); String inputLine;
+				 * 
+				 * response = new StringBuffer();
+				 * 
+				 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
+				 * 
+				 * in.close();
+				 */
+				in = new BufferedReader(new InputStreamReader(con.getInputStream()), MAX_SIZE);
 				response = new StringBuffer();
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					response.append(inputLine);
@@ -332,16 +329,13 @@ public class EncrptDesryptDataService {
 			}
 		} catch (Exception e) {
 			logger.error("EncrptDesryptDataService : Exception in " + methodName + " " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			in.close();
-			}
-			catch (IOException e) {
+				in.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
-		}
+			}
 		}
 		return response.toString();
 	}

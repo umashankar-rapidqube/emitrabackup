@@ -39,12 +39,12 @@ public class PUCController {
 	}
 	
 	@RequestMapping(value = "/savePUCDetails" ,method = RequestMethod.POST)
-	public ModelAndView bonafideHi(PUCModel pucModel , HttpServletRequest request) {
+	public ModelAndView savePUCDetails(PUCModel pucModel , HttpServletRequest request) {
 		
 		JSONObject pucDetails = pucService.insertData(pucModel);
 		
 		try {
-			logger.info("Actual Amount  :"+pucDetails.getString("Total_Amount")+" TransactionId : "+pucDetails.getString("Request_ID")+" Billamount : "+pucDetails.getString("Bill_Amount")+" ServiceProvider ID : "+pucDetails.getString("Service_ID"));
+			logger.debug("Actual Amount  :"+pucDetails.getString("Total_Amount")+" TransactionId : "+pucDetails.getString("Request_ID")+" Billamount : "+pucDetails.getString("Bill_Amount")+" ServiceProvider ID : "+pucDetails.getString("Service_ID"));
 		
 		    String checkSSO = EncrptDesryptDataService.checkSSOID();
 		    if(checkSSO.equalsIgnoreCase("yes")) {
@@ -59,28 +59,10 @@ public class PUCController {
 				String date = pucDetails.getString("Created_Date");
 				date = ReceiptPrint.convertDate(date , "yyyy-MM-dd'T'hh:mm:ss.SSSZ" , "yyyyMMddHHmmssSSS");
 				request.setAttribute("date" , date);
-				
-				/*logger.info("clickToPay :: Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
-						+" total100note :"+NoteType.total100Note+" total200note :"+NoteType.total200Note+" total500note :"	+
-						NoteType.total500Note+" total2000note :"+NoteType.total2000Note );
-				NoteType.total10Note=0;
-				NoteType.total20Note=0;
-				NoteType.total50Note=0;
-				NoteType.total100Note=0;
-				NoteType.total200Note=0;
-				NoteType.total500Note=0;
-				NoteType.total2000Note=0;
-				NoteType.cashTimer=0;
-				NoteType.depositAmount = 0;
-				
-				logger.info("clickToPay ::After regreshing Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
-						+" total100note :"+NoteType.total100Note+" total200note :"+NoteType.total200Note+" total500note :"	+
-						NoteType.total500Note+" total2000note :"+NoteType.total2000Note );*/
 		    }
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			logger.error("PUCController, Exception in bonafideHi : "+e.getMessage());
-			/*e.printStackTrace();*/
 		}
 		
 		if(pucModel.getLangCode()=="1")

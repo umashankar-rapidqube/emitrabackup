@@ -23,6 +23,9 @@ import model.MachineAuth;
 
 @Service("billService")
 public class BillServiceImpl implements BillService {
+	InputStream in;
+	FileOutputStream fos;
+	
 	@Autowired
 	private BillDAO billDAO;
 
@@ -162,6 +165,7 @@ public class BillServiceImpl implements BillService {
 	@Override
 	public JSONObject downloadfile(JSONObject json, String registration, HttpServletRequest req)
 			throws JSONException, IOException {
+		try {
 		String certificateurl = (String) json.get("URL");
 		String arr[] = certificateurl.split("urlOfPrinting=");
 		String directory = System.getProperty("catalina.base") + "\\webapps";
@@ -184,15 +188,15 @@ public class BillServiceImpl implements BillService {
 		f = new File(directory + File.separator + registration + "_certificates.pdf");
 		if (!f.exists())
 			f.createNewFile();
-		InputStream in = url.openStream();
-		FileOutputStream fos = new FileOutputStream(f);
+		in = url.openStream();
+		fos = new FileOutputStream(f);
 		int length = -1;
 		byte[] buffer = new byte[1024];// buffer for portion of data from connection
 		while ((length = in.read(buffer)) > -1) {
 			fos.write(buffer, 0, length);
 		}
-		fos.close();
-		in.close();
+		//fos.close();
+		//in.close();
 		if (f.exists()) {
 			directory = "http://localhost:" + req.getLocalPort()
 					+ "/KioskService/certificatecontainer.jsp?urlOfPrinting=http://localhost:" + req.getLocalPort()
@@ -205,6 +209,22 @@ public class BillServiceImpl implements BillService {
 			json.put("ERROR_MESSAGE", "File not download");
 		}
 		json.put("URL", directory);
+		}
+		catch (Exception e)
+		{
+			
+		}
+	
+		finally
+		{
+			try {
+				fos.close();
+				in.close();}
+			catch (IOException e) {
+		
+		}
+		}        	
+    
 		return json;
 	}
 

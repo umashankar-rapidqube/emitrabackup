@@ -23,10 +23,10 @@
 
 </head>
 <c:choose>
-  <c:when test="${flag==1}">
+  <c:when test="${flag==1}"><!-- ezetap -->
 	 <body onload="submit()" style="background: url(img/inner-bg.png); background-size: cover;">
   </c:when>
-  <c:otherwise>
+  <c:otherwise><!-- billdesk -->
 	 <body onload="submit1()" style="background: url(img/inner-bg.png); background-size: cover;">
  </c:otherwise>
 </c:choose>
@@ -38,6 +38,7 @@
 	
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script src="js/jquery-1.12.4.js"></script>
+	
 	<script>
 function submit() {
 	//alert("csd");

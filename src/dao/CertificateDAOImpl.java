@@ -81,7 +81,7 @@ public class CertificateDAOImpl implements CertificateDAO {
 	public Bill getCertiPrintBillDetails(Bill bill) {
 
 		Bill printCertiBillInfo = new Bill();
-		logger.info("getCertiPrintBillDetails, serviceProviderID : " + bill.getServiceProviderID());
+		logger.debug("getCertiPrintBillDetails, serviceProviderID : " + bill.getServiceProviderID());
 		try {
 			QueryDetails queryDetails = new QueryDetails("proc_kiosk");
 

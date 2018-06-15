@@ -60,6 +60,10 @@
 							type="hidden" name="serviceName" id="serviceName" />
 							<input type="hidden" name="langCode" id="langCode" value="1" />
 					</form>
+					<form id="spd1">
+						<input type="hidden" name="langCode" id="langCode" value="1" />
+						<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+					</form>
 					<input type="hidden" value="${serviceID}" id="srvID" />
                     
                     <div class="fourservices">
@@ -131,8 +135,9 @@
 								</div>
 							</div>
 							<div class="button_div">
-                                <a href="governmentServiceProviderhindi" class="panel">
-                                    <img src="img/new/backhindi.png" alt="" /></a>
+                                <a href="javascript:void(0);" onclick="getSP('GovernmentServiceProvider')" class="panel">
+									<img src="img/new/backhindi.png" alt="" />
+								</a>
                             </div>
                         </div>
                     </div>
@@ -183,6 +188,13 @@
 			$("#SubSerId").submit();
 	    	
 	    }
+		
+		function getSP(pageName) {
+			$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd1").action = "utilityBills";
+			document.getElementById("spd1").method = "post";
+			document.getElementById('spd1').submit();
+		}
 	
     </script>
 

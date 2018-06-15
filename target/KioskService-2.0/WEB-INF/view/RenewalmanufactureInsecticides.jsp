@@ -458,6 +458,8 @@
 	<script type="text/javascript" src="js/formValidation.min.js"></script>
 	<script type="text/javascript" src="js/bootstrapvalid.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 	<script type="text/javascript"
 		src="js/jquery.mCustomScrollbar.concat.min.js"></script>
 

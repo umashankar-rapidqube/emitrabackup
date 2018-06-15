@@ -61,7 +61,7 @@
 								<div class="row">
 
 									<div class="billmidmain">
-										<h1>कृपया  प्रमाण पत्र प्राप्त करने  के लिए अपना विवरण दर्ज करें</h1>
+										<h1>कृपया  <span id="serviceName"></span> प्रमाणपत्र देखने /छापने   के लिए अपना विवरण दर्ज करें</h1>
 										<form id="certificate_details">
 											<div class="feildone" style="text-align: center">
 												<div class="col-md-6 col-md-offset-3">
@@ -123,8 +123,18 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 	<script type="text/javascript">
   	$(function() {
+  		var id ="${subServiceID}";
+		if(id==100){
+			$("#serviceName").html("मूल निवास, अल्पसंख्यक, सामान्य  ");	
+		}else if(id==200){
+			$("#serviceName").html("जाति");
+		}
+  		
 		$("#checkForm").on('click',function() {
 		//	alert("dfsgfdh");
 			$("#errTokenId").html('');

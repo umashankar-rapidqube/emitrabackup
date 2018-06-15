@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -11,14 +11,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>GOVERNMENT SERVICES</title>
+		<c:if test="${bill.langCode == 0}"><title>GOVERNMENT SERVICES</title></c:if>
+		<c:if test="${bill.langCode == 1}"><title>सरकारी सेवाएं</title></c:if>
 		<link href="css/font-awesome.css" type="text/css" rel="stylesheet" />
 		<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/bootstrap-material-design.min.css" />
 		<link rel="icon" href="img/favicon.ico" type="image/x-icon" />
 		<link href="css/my-style.css" type="text/css" rel="stylesheet" />
 	</head>
-
 
 	<body style="background: url(img/inner-bg.png); background-size: cover;">
 		<div id="wrapper">
@@ -44,8 +44,10 @@
 										</div>
 									</div>
 									<div class="col-md-4">
-										<a href="index" class="panel pull-right homebtn"> <img
-											src="img/new/home.png" alt="" /></a>
+										<a href="index" class="panel pull-right homebtn">
+											<c:if test="${bill.langCode == 0}"><img src="img/new/home.png" alt="" /></c:if>
+											<c:if test="${bill.langCode == 1}"><img src="img/new/homehindi.png" alt="" /></c:if>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -54,10 +56,8 @@
 							<input type="hidden" name="serviceID" id="serviceID" />
 					     </form>
 					     <form id="spd1">
-							<input type="hidden" name="langCode" id="langCode" value="0">
+							<input type="hidden" name="langCode" id="langCode" value="${bill.langCode}">
 							<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
-						</form>
-					    <form method="post" id="spdIN">
 						</form>
 						
 						<div class="fourservices">
@@ -65,13 +65,22 @@
 								<div class="container main_row">
 									<div class="row circle-container">
 										<div class="billmidmain">
-											<h1 class="">GOVERNMENT SERVICES</h1>
+											<c:if test="${bill.langCode == 0}"><h1 class="">GOVERNMENT SERVICES</h1></c:if>
+											<c:if test="${bill.langCode == 1}"><h1 class="">सरकारी सेवाएं</h1></c:if>
 											<div class="col-md-3 deg30">
 												<div class="grevanceservices">
-													<a href="javascript:void(0);" onclick="getSP('2289')" class="panel"> <img
-														src="img/print-certificate.png" alt="" /> <span>View/Print
-														Certificate</span>
-													</a>
+													<c:if test="${bill.langCode == 0}">
+														<a href="javascript:void(0);" onclick="getSP('2289' , 'governmentservice11')" class="panel">
+															<img src="img/print-certificate.png" alt="" />
+															<span>View/Print Certificate</span>
+														</a>
+													</c:if>
+													<c:if test="${bill.langCode == 1}">
+														<a href="javascript:void(0);" onclick="getSP('2289' , 'governmentservicehindi11')" class="panel">
+															<img src="img/print-certificate.png" alt="" />
+															<span>प्रमाणपत्र देखें/छापें</span>
+														</a>
+													</c:if>
 												</div>
 											</div>
 											<div class="clearfix"></div> 
@@ -84,15 +93,26 @@
 											</div>
 											<div class="col-md-3 deg60">
 												<div class="grevanceservices">
-													<a href="#" onclick="getSPIN()" class="panel">
-													 <img src="img/bhamashah_logo.png" alt="" /> <span>Updation of mobile number in Bhamashah Card</span>
-													</a>
+													<c:if test="${bill.langCode == 0}">
+														<a href="#" onclick="getSP1('bhamashahCard' , 'bhamashahCard')" class="panel">
+															<img src="img/bhamashah_logo.png" alt="" />
+															<span>Updation of mobile number in Bhamashah Card</span>
+														</a>
+													</c:if>
+													<c:if test="${bill.langCode == 1}">
+														<a href="#" onclick="getSP1('bhamashahCardHi' , 'bhamashahCardHi')" class="panel">
+															<img src="img/bhamashah_logo.png" alt="" />
+															<span>भामाशाह कार्ड में मोबाइल नंबर का अपडेशन</span>
+														</a>
+													</c:if>
 												</div>
 											</div>
 											<div class="col-md-3 deg90">
 												<div class="grevanceservices">
-													<a  href="javascript:void(0);" onclick="getSP1('ViewServiceStatus')" class="panel">
-														<img src="img/Various_Service.png" alt="" /> <span>View Status Of Various Services</span>
+													<a  href="javascript:void(0);" onclick="getSP1('ViewServiceStatus' , 'utilityBills')" class="panel">
+														<img src="img/Various_Service.png" alt="" />
+														<c:if test="${bill.langCode == 0}"><span>View Status Of Various Services</span></c:if>
+														<c:if test="${bill.langCode == 1}"><span>विभिन्न सेवाओं की स्थिति देखें</span></c:if>
 													</a>
 												</div>
 											</div>
@@ -115,8 +135,14 @@
 									</div>
 								</div>
 								<div class="button_div">
-									<a href="service" class="panel"> <img src="img/new/back.png"
-										alt=""></a>
+									<a href="javascript:void(0);" onclick="getSP1('Service' , 'service')" class="panel">
+										<c:if test="${bill.langCode == 0}">
+											<img src="img/new/back.png" alt="" />
+										</c:if>
+										<c:if test="${bill.langCode == 1}">
+											<img src="img/new/backhindi.png" alt="">
+										</c:if>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -132,26 +158,19 @@
 		<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
 		
 		<script type="text/javascript">
-			function getSP(id) {
+			function getSP(id , actionName) {
 		    	$("#serviceID").val(id);
-				document.getElementById("spd").action = "governmentservice11";
+				document.getElementById("spd").action = actionName;
 				document.getElementById("spd").method = "post";
 				document.getElementById('spd').submit();
 			}
 			
-			function getSP1(pageName) {
+			function getSP1(pageName , actionName) {
 				$("#serviceProviderPage").val(pageName);
-				document.getElementById("spd1").action = "utilityBills";
+				document.getElementById("spd1").action = actionName;
 				document.getElementById("spd1").method = "post";
 				document.getElementById('spd1').submit();
 			}
-			
-			function getSPIN(id,name) {
-				document.getElementById("spdIN").action = "bhamashahCard";
-				document.getElementById("spdIN").method = "post";
-				document.getElementById('spdIN').submit();
-			}
-			
 		</script>
 	</body>
 </html>

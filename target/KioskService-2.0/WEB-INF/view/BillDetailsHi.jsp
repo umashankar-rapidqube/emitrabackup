@@ -154,51 +154,61 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 
 	<script>
 
 	function clicktopay() {
+		
 		var billAmount = $("#billActualAmount").val();
 	 	$("#errUpdateAmount").html("");
 	 	var partpaymentallow = $("#partpaymentallow").val();
 		var tid= $("#transactionId").val();
-		
 		if(partpaymentallow  == 'true'){
 			var udpateAmount = $("#udpateAmount").val();
+			var udpateAmountArr = udpateAmount.split(".");
 			var letters = /^[0-9\.]+$/;
+			
 			if(udpateAmount==null){
-				$("#errUpdateAmount").html("<span style='color:red;'>* कृपया जमा राशि दर्ज करें</span>");
-				$("#udpateAmount").focus();
-				return false;
+				
+				return showError("कृपया जमा राशि दर्ज करें");
+				
 			}else if(!udpateAmount.match(letters)) {
-				$("#errUpdateAmount").html("<span style='color:red;'>* कृपया केवल सकारात्मक राशि दर्ज करें। कृपया पुनः प्रयास करें</span>");
-				$("#udpateAmount").focus();
-				return false;
+				
+				return showError("कृपया केवल सकारात्मक राशि दर्ज करें। कृपया पुनः प्रयास करें");
+				
 			}else if (parseInt(udpateAmount) <= 0 || isNaN(udpateAmount)) {
-		    	$("#errUpdateAmount").html("<span style='color:red;'>* कृपया 0 रुपये से अधिक राशि दर्ज करें। कृपया फिर से प्रयास करें</span>");
-				$("#udpateAmount").focus();
-				return false;
+				
+				return showError("कृपया 0 रुपये से अधिक राशि दर्ज करें। कृपया फिर से प्रयास करें");
+				
 		    }else if (Math.sign(udpateAmount)!=1 ){
-		    	//alert("(Math.sign(udpateAmount)  :: "+(Math.sign(udpateAmount)));
-		    	$("#errUpdateAmount").html("<span style='color:red;'>* कृपया 0 रुपये से अधिक राशि दर्ज करें। कृपया फिर से प्रयास करें।</span>");
-				$("#udpateAmount").focus();
-				return false;
-		    }else if(billAmount != udpateAmount){
+
+		    	return showError("कृपया 0 रुपये से अधिक राशि दर्ज करें। कृपया फिर से प्रयास करें।");
+				
+		    }else if (udpateAmountArr[0]=='' || udpateAmountArr[0]=='0'){
+		    	
+		    	return showError("कृपया 50 रुपये से अधिक या  बराबर राशि दर्ज करें। कृपया फिर से प्रयास करें।");
+		    	
+		    }
+		    else if (parseInt(udpateAmount) <50 ) {
+		    	
+		    	return showError("कृपया 50 रुपये से अधिक या  बराबर  राशि दर्ज करें। कृपया फिर से प्रयास करें।");
+		    	
+			//}else if(billAmount != udpateAmount){
+			}else if(parseFloat(billAmount) != parseFloat(udpateAmount)){
 			//	alert("(Math.sign(udpateAmount)  2222:: "+(Math.sign(udpateAmount)));
 				var partpaymenttype = $("#partpaymenttype").val();
 			//	alert("amount : "+udpateAmount+" partpaymenttype : "+partpaymenttype);
-				if(partpaymenttype=="Above"){
-					if(billAmount<udpateAmount){
-						$("#errUpdateAmount").html("<span style='color:red;'>* कृपया बिल की राशि से अधिक राशि दर्ज करें ।</span>");
-						$("#udpateAmount").focus();
-						return false;
-					}
-				}else if(partpaymenttype=="Below"){
-					if(billAmount>udpateAmount){
-						$("#errUpdateAmount").html("<span style='color:red;'>* कृपया  बिल राशि से कम राशि दर्ज करें ।</span>");
-						$("#udpateAmount").focus();
-						return false;
-					}
+				if(partpaymenttype=="Above" && parseInt(billAmount)<parseInt(udpateAmount)){
+					
+					showError("कृपया बिल की राशि से अधिक राशि दर्ज करें ।");
+					
+				}else if(partpaymenttype=="Below" && parseInt(billAmount)>parseInt(udpateAmount)){
+					
+					showError("कृपया  बिल राशि से कम राशि दर्ज करें ।");
+
 				}
 				
 				$.ajax({
@@ -235,6 +245,13 @@
 		}
 		
 	}
+	
+	function showError(msg){
+		$("#errUpdateAmount").html("<span style='color:red;'>* "+msg+"</span>");
+		$("#udpateAmount").focus();
+		return false;
+	}
+	
 	</script>
 </body>
 

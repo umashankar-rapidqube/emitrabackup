@@ -62,8 +62,12 @@
                                 <div class="row">
                                
                                     <div class="billmidmain">
-                                        <h1>PLEASE ENTER DETAILS FOR WATER BILL </h1>
-                                         <form id="phed_details">
+                                        <h1>PLEASE ENTER DETAILS FOR ${serviceProvider.serviceProviderName} WATER BILL </h1>
+                                         <form id="spd">
+	                                    	<input type="hidden" name="langCode" id="langCode1" value="0">
+											<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+										</form>
+										<form id="phed_details">
                                         <div class="feildone" style="text-align:center">
                                             <div class="col-md-6 col-md-offset-3">
                                                 <div class="col-md-4">
@@ -135,8 +139,9 @@
                          
                             </div>
                             <div class="button_div">
-                                <a href="serviceprovider" class="panel">
-                                    <img src="img/new/back.png" alt=""></a>
+								<a href="javascript:void(0);" onclick="getSP('Bill_Water')" >
+									<img src="img/new/back.png" alt="" />
+								</a>
                                 
                             </div>
                         </div>
@@ -152,7 +157,15 @@
     <script type="text/javascript"  src="js/bootstrap.min.js"></script>
     <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="js/app-inner.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
   <script type="text/javascript">
+	  function getSP(pageName) {
+	  	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd").action = "utilityBills";
+			document.getElementById("spd").method = "post";
+			$("#spd").submit();
+		}
   	$(function() {
 		$("#checkForm").on('click',function() {
 			//alert("dfhg");

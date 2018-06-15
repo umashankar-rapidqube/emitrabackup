@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,14 +30,13 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response.Status.Family;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,14 +57,12 @@ import model.Bill;
 import model.CardPaymentDetails;
 import model.CertificateInfo;
 import model.Discom;
-import model.FamilyDetail;
 import model.Jamabandi;
 import model.LatestVersionDetails;
 import model.Login;
 import model.MachineAuth;
 import model.NoteType;
 import model.Phed;
-import model.RationBean;
 import model.grievenceDetails;
 import service.BillService;
 import service.CertificateService;
@@ -94,17 +90,17 @@ public class BillController {
 	private static final String noCardMerchantCode = "EMITRAPLUSBILLDESK";
 
 	// digit secure
-	private static final String digitSecureEncryptionKey = "1AEED1A2FD4FE22A527A5AFA6EDEA";//Production
-//	private static final String digitSecureEncryptionKey = "E2579841F97C9B6D48C79B4367EFC";//Testing
-	private static final String digitSecureMerchantCode = "EMITRAPLUSDIGITSECURE";//Production
-//	private static final String digitSecureMerchantCode = "EMITRAPLUS";//Testing
-	private static final String digitSecureCheckSum = "z[$#vdPb~:2h@8V";//Production
-//	private static final String digitSecureCheckSum = "@Vr/.]-2Qa2ManE";//Testing
-	
-	private static final String CLIENTID_EMITRA_ID_PROD = "d4c1624f-cc0b-40bf-af73-4779b5a9293f"; // PROD
-	
+	private static final String digitSecureEncryptionKey = "1AEED1A2FD4FE22A527A5AFA6EDEA";// Production
+	// private static final String digitSecureEncryptionKey =
+	// "E2579841F97C9B6D48C79B4367EFC";//Testing
+	private static final String digitSecureMerchantCode = "EMITRAPLUSDIGITSECURE";// Production
+	// private static final String digitSecureMerchantCode = "EMITRAPLUS";//Testing
+	private static final String digitSecureCheckSum = "z[$#vdPb~:2h@8V";// Production
+	// private static final String digitSecureCheckSum = "@Vr/.]-2Qa2ManE";//Testing
+
 	BufferedReader br;
-	
+	PrintWriter pw;
+
 	@Autowired
 	BillService billService;
 
@@ -163,7 +159,7 @@ public class BillController {
 			bsnlType = req.getParameter("bsnlType");
 		}
 
-		logger.info("Billinfo, ServiceProviderID :: " + bill.getServiceProviderID() + " serviceProviderName :: "
+		logger.debug("Billinfo, ServiceProviderID :: " + bill.getServiceProviderID() + " serviceProviderName :: "
 				+ bill.getServiceProviderName() + " MobileNo : " + bill.getBillMobileNo() + " email id : "
 				+ bill.getBillEmail());
 
@@ -197,7 +193,7 @@ public class BillController {
 		} catch (Exception e) {
 			logger.error("Billinfo, Exception in sendPostForEncryptData :" + e.getMessage());
 			encryptData = null;
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		logger.debug("Billinfo, encryptData  :" + encryptData);
@@ -207,7 +203,7 @@ public class BillController {
 			} catch (Exception e) {
 				logger.error("Exception in getBillInformationData encryptDetails: " + e.getMessage());
 				encryptDetails = null;
-				/*e.printStackTrace();*/
+				/* e.printStackTrace(); */
 			}
 		}
 		logger.debug("Billinfo, encryptDetails : " + encryptDetails);
@@ -216,7 +212,7 @@ public class BillController {
 			billInformation = encryptDecryptService.sendPostForDecryptDetail(encryptDetails, bill);
 		} catch (Exception e) {
 			logger.error("Billinfo, Exception in decryptdetails :" + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		String transactionId = "";
 		double d = 0.0;
@@ -232,7 +228,7 @@ public class BillController {
 			flag = 1;
 		}
 
-		logger.info("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
+		logger.debug("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
 				+ d + " serviceProverId : " + bill.getServiceProviderID());
 
 		Bill infoBill = new Bill();
@@ -245,7 +241,7 @@ public class BillController {
 			billService.updateBillInformation(infoBill);
 		} catch (Exception e) {
 			logger.error("Exception in updateBillInformation : " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		if (flag == 1) {
@@ -265,7 +261,7 @@ public class BillController {
 
 	@RequestMapping(value = "/clickToPay", method = RequestMethod.POST)
 	public ModelAndView clickToPay(Model model, Bill bill, HttpServletRequest req) {
-		logger.info("Actual Amount  :" + bill.getBillActualAmount() + " TransactionId : " + bill.getTransactionId()
+		logger.debug("Actual Amount  :" + bill.getBillActualAmount() + " TransactionId : " + bill.getTransactionId()
 				+ " Billamount : " + bill.getBillAmount() + " ServiceProvider ID : " + bill.getServiceProviderID());
 
 		String checkSSO = EncrptDesryptDataService.checkSSOID();
@@ -280,7 +276,7 @@ public class BillController {
 			req.setAttribute("consumerKeyValue", bill.getConsumerKeyValue());
 			req.setAttribute("date", bill.getCreatedDate());
 
-			logger.info("clickToPay :: Note Value, total10note :" + NoteType.total10Note + " total20note :"
+			logger.debug("clickToPay :: Note Value, total10note :" + NoteType.total10Note + " total20note :"
 					+ NoteType.total20Note + " total50note:" + NoteType.total50Note + " total100note :"
 					+ NoteType.total100Note + " total200note :" + NoteType.total200Note + " total500note :"
 					+ NoteType.total500Note + " total2000note :" + NoteType.total2000Note);
@@ -294,7 +290,7 @@ public class BillController {
 			NoteType.cashTimer = 0;
 			NoteType.depositAmount = 0;
 
-			logger.info("clickToPay ::After regreshing Note Value, total10note :" + NoteType.total10Note
+			logger.debug("clickToPay ::After regreshing Note Value, total10note :" + NoteType.total10Note
 					+ " total20note :" + NoteType.total20Note + " total50note:" + NoteType.total50Note
 					+ " total100note :" + NoteType.total100Note + " total200note :" + NoteType.total200Note
 					+ " total500note :" + NoteType.total500Note + " total2000note :" + NoteType.total2000Note);
@@ -307,25 +303,14 @@ public class BillController {
 		}
 	}
 
-	@RequestMapping(value = "/service")
-	public ModelAndView service(Model model, HttpServletRequest request, HttpServletResponse response) {
-		return new ModelAndView("Service");
-	}
-
-	@RequestMapping(value = "/serviceprovider")
-	public ModelAndView getServiceprovider(Model model, HttpServletRequest req) {
-		return new ModelAndView("Serviceprovider");
-	}
-
-	@RequestMapping(value = "/serviceproviderHi")
-	public ModelAndView getServiceproviderhindi(Model model, HttpServletRequest req) {
-		return new ModelAndView("Serviceproviderhindi");
+	@RequestMapping(value = "/service", method = RequestMethod.POST)
+	public String service(Model model, HttpServletRequest request, Bill bill) {
+		request.setAttribute("langCode", bill.getLangCode());
+		return bill.getServiceProviderPage();
 	}
 
 	@RequestMapping(value = "/utilityBills", method = RequestMethod.POST)
 	public String getUtilityBills(Model model, Bill bill, HttpServletRequest req) {
-		int langCode = bill.getLangCode();
-		bill.setLangCode(langCode);
 		model.addAttribute("bill", bill);
 		return bill.getServiceProviderPage();
 	}
@@ -347,7 +332,7 @@ public class BillController {
 		String serviceID = certificateInfo.getServiceID();
 		String subServiceID = certificateInfo.getSubServiceID();
 
-		logger.info("Government Service Token Id : " + tokenid);
+		logger.debug("Government Service Token Id : " + tokenid);
 		String encryptURL = "https://api.sewadwaar.rajasthan.gov.in/app/live/eMitra/Prod/PrintCert/Service/getCertDetails?tokenNo="
 				+ tokenid + "&printType=A4&client_id=96f2ea05-8742-401d-aa42-ec269f8a71c0";
 
@@ -360,7 +345,7 @@ public class BillController {
 		try {
 			json = (JSONObject) parser.parse(response1);
 			String url = (String) json.get("URL");
-			logger.info("Government Service :: how Certificate URL with urlOfPrinting :" + url);
+			logger.debug("Government Service :: how Certificate URL with urlOfPrinting :" + url);
 
 			if (url.equals("")) {
 				if (langCode == 0)
@@ -375,13 +360,13 @@ public class BillController {
 						result = "noDetailsFound";
 					else
 						result = "noDetailsFoundHi";
-					logger.info("CertificateService Service :: Error in downloading::"
+					logger.debug("CertificateService Service :: Error in downloading::"
 							+ (String) json.get("ERROR_MESSAGE"));
 					return new ModelAndView(result);
 				} else {
 					String arr[] = ((String) json.get("URL")).split("urlOfPrinting=");
 					req.setAttribute("url", (String) json.get("URL"));
-					logger.info("CertificateService Service :: urlOfPrinting::" + arr[1]);
+					logger.debug("CertificateService Service :: urlOfPrinting::" + arr[1]);
 					req.setAttribute("url1", arr[1]);
 				}
 
@@ -404,8 +389,8 @@ public class BillController {
 				result = "noDetailsFound";
 			else
 				result = "noDetailsFoundHi";
-			logger.error("BillController, Exception in govtservice for insertCertificateDetails :" +e.getMessage());
-			/*e.printStackTrace();*/
+			logger.error("BillController, Exception in govtservice for insertCertificateDetails :" + e.getMessage());
+			/* e.printStackTrace(); */
 		}
 		logger.info("Government Service :: ModelAndView Name :" + result);
 		return new ModelAndView(result);
@@ -419,7 +404,7 @@ public class BillController {
 		String checkSSO = EncrptDesryptDataService.checkSSOID();
 		if (checkSSO.equalsIgnoreCase("yes")) {
 			logger.info("ServicePaymentmode :: Before flushing note value");
-			logger.info("ServicePaymentmode :: Note Value, total10note :" + NoteType.total10Note + " total20note :"
+			logger.debug("ServicePaymentmode :: Note Value, total10note :" + NoteType.total10Note + " total20note :"
 					+ NoteType.total20Note + " total50note:" + NoteType.total50Note + " total100note :"
 					+ NoteType.total100Note + " total200note :" + NoteType.total200Note + " total500note :"
 					+ NoteType.total500Note + " total2000note :" + NoteType.total2000Note);
@@ -433,7 +418,7 @@ public class BillController {
 			NoteType.cashTimer = 0;
 			NoteType.depositAmount = 0;
 
-			logger.info("ServicePaymentmode ::After regreshing Note Value, total10note :" + NoteType.total10Note
+			logger.debug("ServicePaymentmode ::After regreshing Note Value, total10note :" + NoteType.total10Note
 					+ " total20note :" + NoteType.total20Note + " total50note:" + NoteType.total50Note
 					+ " total100note :" + NoteType.total100Note + " total200note :" + NoteType.total200Note
 					+ " total500note :" + NoteType.total500Note + " total2000note :" + NoteType.total2000Note);
@@ -447,7 +432,7 @@ public class BillController {
 			String CertiTransID = req.getParameter("transactionID");
 			String ServiceID = req.getParameter("serviceID");
 			String serviceName = req.getParameter("serviceName");
-			logger.info("ServicePaymentmode ::Amount :" + Amount + " CertiTransID :" + CertiTransID + " ServiceID:"
+			logger.debug("ServicePaymentmode ::Amount :" + Amount + " CertiTransID :" + CertiTransID + " ServiceID:"
 					+ ServiceID);
 
 			req.setAttribute("token", token);
@@ -470,14 +455,9 @@ public class BillController {
 		return new ModelAndView("GovernmentServiceProvider");
 	}
 
-	@RequestMapping(value = "/transactionservice1")
-	public ModelAndView transactionservice(Model model, HttpServletRequest req) throws Exception {
-		return new ModelAndView("tokenVerification");
-	}
-
-	@RequestMapping(value = "/transactionservicehi1")
-	public ModelAndView transactionservicehi(Model model, HttpServletRequest req) throws Exception {
-		return new ModelAndView("tokenVerificationHi");
+	@RequestMapping(value = "/governmentServiceProviderhindi")
+	public ModelAndView governmentServiceProviderhindi(Model model, HttpServletRequest req) {
+		return new ModelAndView("GovernmentServiceProviderhindi");
 	}
 
 	@RequestMapping(value = "/onlineverification")
@@ -494,7 +474,7 @@ public class BillController {
 	public ModelAndView tokenVerification(Model model, HttpServletRequest req) throws Exception {
 		String transId = req.getParameter("transId");
 		int langCode = Integer.parseInt(req.getParameter("langCode"));
-		logger.info("tokenVerification, TransactionID :" + transId);
+		logger.debug("tokenVerification, TransactionID :" + transId);
 
 		String URL = "https://emitraapp.rajasthan.gov.in/webServicesRepository/getTokenVerify";
 		try {
@@ -510,7 +490,7 @@ public class BillController {
 
 		} catch (Exception e) {
 			logger.error("BillController, Exception in tokenVerification ::" + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		if (langCode == 0)
 			return new ModelAndView("transactionDetails");
@@ -526,7 +506,7 @@ public class BillController {
 
 		String serviceId = req.getParameter("serviceId");
 		String tokenNo = req.getParameter("token");
-		logger.info("Online verification, ServiceID:::" + serviceId + " tokenNo :::" + tokenNo);
+		logger.debug("Online verification, ServiceID:::" + serviceId + " tokenNo :::" + tokenNo);
 		String URL = "https://emitraapp.rajasthan.gov.in/webServicesRepository/getMetaDataDetailsForCertificateEmitra";
 
 		try {
@@ -536,7 +516,7 @@ public class BillController {
 			String requestMethod = "POST";
 			String response = service.getPOSTResponse(requestMethod, methodName, param, "", URL);
 
-			logger.info("Online verification, response json :" + response);
+			logger.debug("Online verification, response json :" + response);
 			JSONParser parser = new JSONParser();
 
 			JSONObject json = (JSONObject) parser.parse(response);
@@ -567,7 +547,7 @@ public class BillController {
 			req.setAttribute("Current_Address", Current_Address);
 		} catch (Exception e) {
 			logger.error("BillController, Exception in onlineverify: " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		return new ModelAndView("OnlineVerify");
 	}
@@ -593,7 +573,7 @@ public class BillController {
 		} catch (Exception e) {
 			logger.error("BillController,Exception in discomservice for getting encrypt data :" + e.getMessage());
 			encryptData = null;
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		logger.debug("encryptData  :" + encryptData);
@@ -603,7 +583,7 @@ public class BillController {
 			} catch (Exception e) {
 				encryptDetails = null;
 				logger.error("BillController, Exception in getting discom information :" + e.getMessage());
-				/*e.printStackTrace();*/
+				/* e.printStackTrace(); */
 			}
 		}
 		logger.debug("discom information : " + encryptDetails);
@@ -612,9 +592,9 @@ public class BillController {
 			discomInformation = encryptDecryptService.sendPostForDiscomDecryptData(encryptDetails, bill, dis1);
 		} catch (Exception e) {
 			logger.error("BillController, Exception  sendPostForDiscomDecrptData:" + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
-		logger.info("discomInformation list size :: " + discomInformation.size());
+		logger.debug("discomInformation list size :: " + discomInformation.size());
 
 		/****************************************************************************************************************************/
 
@@ -669,7 +649,7 @@ public class BillController {
 			flag = 1;
 		}
 
-		logger.info("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
+		logger.debug("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
 				+ d + " serviceProverId : " + bill.getServiceProviderID());
 		Bill infoBill = new Bill();
 		if (transactionId != null && !transactionId.equals("")) {
@@ -683,7 +663,7 @@ public class BillController {
 				billService.updateBillInformation(infoBill);
 			} catch (Exception e) {
 				logger.error("BillController, Exception in Discom details updateBillInformation : " + e.getMessage());
-				/*e.printStackTrace();*/
+				/* e.printStackTrace(); */
 			}
 		} else {
 			logger.error("No " + bill.getServiceProviderName() + " details found for updateBillInformation.");
@@ -727,6 +707,12 @@ public class BillController {
 	public ModelAndView govtservice1(Model model, HttpServletRequest req) {
 		req.setAttribute("serviceID", req.getParameter("serviceID"));
 		return new ModelAndView("birth_death");
+	}
+
+	@RequestMapping(value = "/governmentservicehindi11")
+	public ModelAndView govtservice1hindi(Model model, HttpServletRequest req) {
+		req.setAttribute("serviceID", req.getParameter("serviceID"));
+		return new ModelAndView("birth_deathhindi");
 	}
 
 	@RequestMapping(value = "/governmentservices12")
@@ -786,7 +772,7 @@ public class BillController {
 		} catch (Exception e) {
 			logger.error("BillController, Exception in phedservice for getting encrypt data :" + e.getMessage());
 			encryptData = null;
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		logger.debug("phedservice, encryptData  :" + encryptData);
@@ -796,7 +782,7 @@ public class BillController {
 			} catch (Exception e) {
 				logger.error("BillController, Exception in getPhedInformationData: " + e.getMessage());
 				encryptDetails = null;
-				/*e.printStackTrace();*/
+				/* e.printStackTrace(); */
 			}
 		}
 		logger.debug("phedservice, encryptDetails : " + encryptDetails);
@@ -805,9 +791,9 @@ public class BillController {
 			phedInformationlist = encryptDecryptService.sendPostForPhedDecryptData(encryptDetails, bill, ph);
 		} catch (Exception e) {
 			logger.error("BillController, Exception phedservice  :" + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
-		logger.info("phedservice, phedInformationlist " + phedInformationlist.size());
+		logger.debug("phedservice, phedInformationlist " + phedInformationlist.size());
 
 		/****************************************************************************************************************************/
 
@@ -861,7 +847,7 @@ public class BillController {
 			billamount = x;
 			flag = 1;
 		}
-		logger.info("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
+		logger.debug("Billinfo, billamount : " + billamount + " transactionId : " + transactionId + " ActualAmountt :: "
 				+ d + " serviceProverId : " + bill.getServiceProviderID());
 
 		Bill infoBill = new Bill();
@@ -873,7 +859,7 @@ public class BillController {
 			billService.updateBillInformation(infoBill);
 		} catch (Exception e) {
 			logger.error("BillController, Exception in Phed details updateBillInformation : " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		if (flag == 1) {
@@ -890,19 +876,6 @@ public class BillController {
 				return "redirect:noDetailsFoundHi";
 		}
 		/*******************************************************************************************************************************/
-	}
-
-	@RequestMapping(value = "/birthservice", method = RequestMethod.POST)
-	public ModelAndView birthservice(Model model, HttpServletRequest req) {
-		String sID = req.getParameter("serviceID");
-		String ssID = req.getParameter("subServiceID");
-		String serviceName = req.getParameter("serviceName");
-		req.setAttribute("serviceID", sID);
-		req.setAttribute("subServiceID", ssID);
-		req.setAttribute("serviceName", serviceName);
-		req.setAttribute("differ", 0);
-		req.setAttribute("certificateDetails", "Birth");
-		return new ModelAndView("birthCertificate");
 	}
 
 	@RequestMapping(value = "/CertificateService", method = RequestMethod.POST)
@@ -932,7 +905,7 @@ public class BillController {
 			requestUrl = "https://emitraapp.rajasthan.gov.in/webServicesRepository/getPehchanCertificateURLWithEmitra?"
 					+ "registrationNumber=" + rno.trim() + "&year=" + year + "&event=3";
 
-		logger.info("CertificateService, requestUrl :" + requestUrl);
+		logger.debug("CertificateService, requestUrl :" + requestUrl);
 
 		try {
 			URL url = new URL(requestUrl);
@@ -945,21 +918,21 @@ public class BillController {
 
 			int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
-				logger.info("CertificateService, response code : " + responseCode + " due to API server error");
+				logger.debug("CertificateService, response code : " + responseCode + " due to API server error");
 				flag = 1;
 			} else {
-				logger.info("CertificateService, response code : " + responseCode);
+				logger.debug("CertificateService, response code : " + responseCode);
 
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuffer jsonString = new StringBuffer();
-				/*String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}*/
+				/*
+				 * String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
 
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}				
+				}
 
 				String s = new String(jsonString);
 				String content = "";
@@ -969,7 +942,7 @@ public class BillController {
 				json = (JSONObject) parser.parse(s);
 
 				String certiStatusCode = (String) json.get("STATUS_CODE");
-				logger.info("CertificateService, certiStatusCode :" + certiStatusCode + " Message "
+				logger.debug("CertificateService, certiStatusCode :" + certiStatusCode + " Message "
 						+ (String) json.get("MESSAGE"));
 
 				if (!certiStatusCode.equals("200"))
@@ -977,7 +950,7 @@ public class BillController {
 				else {
 					content = (String) json.get("URL");
 					req.setAttribute("url", content);
-					logger.info("CertificateService, Show Certificate URL with urlOfPrinting :" + content);
+					logger.debug("CertificateService, Show Certificate URL with urlOfPrinting :" + content);
 
 					if (null == content || content.equals(""))
 						flag = 1;
@@ -987,12 +960,12 @@ public class BillController {
 						String downloadstatus = (String) json.get("STATUS_CODE");
 						if (downloadstatus.equalsIgnoreCase("ApiException")) {
 							flag = 1;
-							logger.info("CertificateService Service :: Error in downloading::"
+							logger.debug("CertificateService Service :: Error in downloading::"
 									+ (String) json.get("ERROR_MESSAGE"));
 						} else {
 							String arr[] = ((String) json.get("URL")).split("urlOfPrinting=");
 							req.setAttribute("url", (String) json.get("URL"));
-							logger.info("CertificateService Service :: urlOfPrinting::" + arr[1]);
+							logger.debug("CertificateService Service :: urlOfPrinting::" + arr[1]);
 							req.setAttribute("url1", arr[1]);
 						}
 					}
@@ -1001,18 +974,14 @@ public class BillController {
 		} catch (Exception e) {
 			flag = 1;
 			logger.error("BillController, CertificateService, Exception msg :: " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
-		}
-	
 
 		if (flag == 0) {
 
@@ -1051,6 +1020,19 @@ public class BillController {
 		return new ModelAndView("birthCertificate");
 	}
 
+	@RequestMapping(value = "/deathservicehi")
+	public ModelAndView deathservicehi(Model model, HttpServletRequest req) {
+		String sID = req.getParameter("serviceID");
+		String ssID = req.getParameter("subServiceID");
+		String serviceName = req.getParameter("serviceName");
+		req.setAttribute("serviceName", serviceName);
+		req.setAttribute("serviceID", sID);
+		req.setAttribute("subServiceID", ssID);
+		req.setAttribute("differ", 1);
+		req.setAttribute("certificateDetails", "Death");
+		return new ModelAndView("birthCertificateHi");
+	}
+
 	@RequestMapping(value = "/marriageservice")
 	public ModelAndView marriageservice(Model model, HttpServletRequest req) {
 		String sID = req.getParameter("serviceID");
@@ -1061,6 +1043,32 @@ public class BillController {
 		req.setAttribute("subServiceID", ssID);
 		req.setAttribute("differ", 2);
 		req.setAttribute("certificateDetails", "Marriage");
+		return new ModelAndView("birthCertificate");
+	}
+
+	@RequestMapping(value = "/marriageservicehi")
+	public ModelAndView marriageservicehi(Model model, HttpServletRequest req) {
+		String sID = req.getParameter("serviceID");
+		String ssID = req.getParameter("subServiceID");
+		String serviceName = req.getParameter("serviceName");
+		req.setAttribute("serviceName", serviceName);
+		req.setAttribute("serviceID", sID);
+		req.setAttribute("subServiceID", ssID);
+		req.setAttribute("differ", 2);
+		req.setAttribute("certificateDetails", "Marriage");
+		return new ModelAndView("birthCertificateHi");
+	}
+
+	@RequestMapping(value = "/birthservice", method = RequestMethod.POST)
+	public ModelAndView birthservice(Model model, HttpServletRequest req) {
+		String sID = req.getParameter("serviceID");
+		String ssID = req.getParameter("subServiceID");
+		String serviceName = req.getParameter("serviceName");
+		req.setAttribute("serviceID", sID);
+		req.setAttribute("subServiceID", ssID);
+		req.setAttribute("serviceName", serviceName);
+		req.setAttribute("differ", 0);
+		req.setAttribute("certificateDetails", "Birth");
 		return new ModelAndView("birthCertificate");
 	}
 
@@ -1077,53 +1085,10 @@ public class BillController {
 		return new ModelAndView("birthCertificateHi");
 	}
 
-	@RequestMapping(value = "/deathservicehi")
-	public ModelAndView deathservicehi(Model model, HttpServletRequest req) {
-		String sID = req.getParameter("serviceID");
-		String ssID = req.getParameter("subServiceID");
-		String serviceName = req.getParameter("serviceName");
-		req.setAttribute("serviceName", serviceName);
-		req.setAttribute("serviceID", sID);
-		req.setAttribute("subServiceID", ssID);
-		req.setAttribute("differ", 1);
-		req.setAttribute("certificateDetails", "Death");
-		return new ModelAndView("birthCertificateHi");
-	}
-
-	@RequestMapping(value = "/marriageservicehi")
-	public ModelAndView marriageservicehi(Model model, HttpServletRequest req) {
-		String sID = req.getParameter("serviceID");
-		String ssID = req.getParameter("subServiceID");
-		String serviceName = req.getParameter("serviceName");
-		req.setAttribute("serviceName", serviceName);
-		req.setAttribute("serviceID", sID);
-		req.setAttribute("subServiceID", ssID);
-		req.setAttribute("differ", 2);
-		req.setAttribute("certificateDetails", "Marriage");
-		return new ModelAndView("birthCertificateHi");
-	}
-
 	@RequestMapping(value = "/videoconferncing")
 	public ModelAndView videoconferncing() {
 		new VedioConference().getVedioConference();
 		return new ModelAndView("index");
-	}
-
-	@RequestMapping(value = "/governmentServiceProviderhindi")
-	public ModelAndView governmentServiceProviderhindi(Model model, HttpServletRequest req) {
-		return new ModelAndView("GovernmentServiceProviderhindi");
-	}
-
-	@RequestMapping(value = "/servicehindi")
-	public ModelAndView servicehindi(Model model, HttpServletRequest req, HttpServletResponse response) {
-
-		return new ModelAndView("Servicehindi");
-	}
-
-	@RequestMapping(value = "/governmentservicehindi11")
-	public ModelAndView govtservice1hindi(Model model, HttpServletRequest req) {
-		req.setAttribute("serviceID", req.getParameter("serviceID"));
-		return new ModelAndView("birth_deathhindi");
 	}
 
 	@RequestMapping(value = "/paymentByCard")
@@ -1170,7 +1135,7 @@ public class BillController {
 
 		} catch (Exception e) {
 			logger.error("BillController, Exception in CardpaymentChecksum: " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		} finally {
 			formatter.close();
 		}
@@ -1202,7 +1167,7 @@ public class BillController {
 				+ "\"," + "\"UDF3\": \"sample 3\"," + "\"OFFICECODE\": \"HQ\","
 				+ "\"REVENUEHEAD\": \"ProductFee-100.00|MerchantComm-26.00\"," + "\"CHECKSUM\": \"" + checkSum + "\"}";
 
-		logger.info("cardPaymentEncDetails, Original String = " + toBeEncryptedString);
+		logger.debug("cardPaymentEncDetails, Original String = " + toBeEncryptedString);
 		if (bill.getYesorno() == 1) {
 			encryptedString = encryptCardDetails(yesCardEncryptionKey, toBeEncryptedString); // Encrypting the string
 			decryptedString = decryptCardDetails(yesCardEncryptionKey, encryptedString); // Decrypting the string
@@ -1210,8 +1175,8 @@ public class BillController {
 			encryptedString = encryptCardDetails(noCardEncryptionKey, toBeEncryptedString); // Encrypting the string
 			decryptedString = decryptCardDetails(noCardEncryptionKey, encryptedString); // Decrypting the string
 		}
-		logger.info("cardPaymentEncDetails, Encrypted String = " + encryptedString);
-		logger.info("cardPaymentEncDetails, Decrypted String = " + decryptedString);
+		logger.debug("cardPaymentEncDetails, Encrypted String = " + encryptedString);
+		logger.debug("cardPaymentEncDetails, Decrypted String = " + decryptedString);
 
 		return encryptedString;
 	}
@@ -1232,7 +1197,7 @@ public class BillController {
 			return Base64.encodeBase64String(cipher.doFinal(toBeEncryptString.getBytes("UTF-8")));
 		} catch (Exception ex) {
 			// Handle exception here
-			logger.error("BillController, Exception in encryptCardDetails : "+ex.getMessage());
+			logger.error("BillController, Exception in encryptCardDetails : " + ex.getMessage());
 			return null;
 		}
 	}
@@ -1253,7 +1218,7 @@ public class BillController {
 			return new String(cipher.doFinal(Base64.decodeBase64(toBeDecryptString)));
 		} catch (Exception ex) {
 			// Handle exception here
-			logger.error("BillController, Exception in decryptCardDetails : "+ex.getMessage());
+			logger.error("BillController, Exception in decryptCardDetails : " + ex.getMessage());
 			return null;
 		}
 	}
@@ -1261,7 +1226,7 @@ public class BillController {
 	public String backToBackCardTrans(String amt, String trnsid, String serviceId, String merchantCode,
 			String transcationId, String PAYMENTMODE) {
 
-		logger.info("backToBackTrans, trnsid :" + trnsid + "amount :" + amt + "service id::" + serviceId);
+		logger.debug("backToBackTrans, trnsid :" + trnsid + "amount :" + amt + "service id::" + serviceId);
 		String backToBackTransStatus = null;
 		String backToBackTransactionID = null;
 
@@ -1275,18 +1240,18 @@ public class BillController {
 		try {
 			String backToBackurl = billService.getbackToBackurl(amt, trnsid, serviceId,
 					"card:" + merchantCode + ":" + transcationId);
-			logger.info("backToBackTrans, BackToBackurl: " + backToBackurl);
+			logger.debug("backToBackTrans, BackToBackurl: " + backToBackurl);
 
 			EncrptDesryptDataService eds = new EncrptDesryptDataService();
 
 			String encryptedB2BUrl = eds.sendPostForEncryptData(backToBackurl);
-			logger.info("backToBackTrans, BackTOBackResponse: " + encryptedB2BUrl);
+			logger.debug("backToBackTrans, BackTOBackResponse: " + encryptedB2BUrl);
 
 			String backtoBackResponse = eds.sendPostForBacktoBack(encryptedB2BUrl);
-			logger.info("backToBackTrans, backtoBackUrl :" + backtoBackResponse);
+			logger.debug("backToBackTrans, backtoBackUrl :" + backtoBackResponse);
 
 			String decryptB2BResponse = eds.sendPostForDecryptData(backtoBackResponse);
-			logger.info("backToBackTrans, decriptBackTOBackResponse :" + decryptB2BResponse);
+			logger.debug("backToBackTrans, decriptBackTOBackResponse :" + decryptB2BResponse);
 
 			org.json.JSONObject json = new org.json.JSONObject(decryptB2BResponse);
 			backToBackTransStatus = json.optString("TRANSACTIONSTATUS");
@@ -1343,7 +1308,7 @@ public class BillController {
 			flagExist = true;
 		}
 		if (flagExist) {
-			//BufferedReader br = null;
+			// BufferedReader br = null;
 			try {
 				br = new BufferedReader(new FileReader(file));
 				String MACHINEID;
@@ -1371,19 +1336,19 @@ public class BillController {
 					}
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
-				logger.error("BillController, Exception in getLoginStatus : "+e.getMessage());
-				/*e.printStackTrace();*/
+				logger.error("BillController, Exception in getLoginStatus : " + e.getMessage());
+				/* e.printStackTrace(); */
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				logger.error("BillController, Exception in getLoginStatus : "+e.getMessage());
-				/*e.printStackTrace();*/
+				logger.error("BillController, Exception in getLoginStatus : " + e.getMessage());
+				/* e.printStackTrace(); */
 			} finally {
 				try {
 					br.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					logger.error("BillController, Exception in getLoginStatus : "+e.getMessage());
-					/*e.printStackTrace();*/
+					logger.error("BillController, Exception in getLoginStatus : " + e.getMessage());
+					/* e.printStackTrace(); */
 				}
 			}
 		}
@@ -1405,9 +1370,9 @@ public class BillController {
 		boolean ISVALID = false;
 
 		String SSOAUTH_RESPONSE = req.getParameter("SSOAUTH_RESPONSE");
-		logger.info("getSSOLoginResponseInfornation, SSOAUTH_RESPONSE :" + SSOAUTH_RESPONSE);
+		logger.debug("getSSOLoginResponseInfornation, SSOAUTH_RESPONSE :" + SSOAUTH_RESPONSE);
 		String resp = new String(Base64.decodeBase64(SSOAUTH_RESPONSE.getBytes()));
-		logger.info("getSSOLoginResponseInfornation, SSOAUTH_RESPONSE JSON " + resp);
+		logger.debug("getSSOLoginResponseInfornation, SSOAUTH_RESPONSE JSON " + resp);
 		JSONParser parser = new JSONParser();
 		JSONObject json;
 		try {
@@ -1423,7 +1388,7 @@ public class BillController {
 
 				logger.info(
 						"getSSOLoginResponseInfornation, We received ISVALID parameter as a false so process will not go further :");
-				logger.info("getSSOLoginResponseInfornation, SSOID = " + SSOID + " , SESSIONID = " + SESSIONID
+				logger.debug("getSSOLoginResponseInfornation, SSOID = " + SSOID + " , SESSIONID = " + SESSIONID
 						+ " , CHECKSUM= " + CHECKSUM);
 
 				return "redirect:login";
@@ -1431,7 +1396,7 @@ public class BillController {
 
 			String generatedMD5CheckSum = getMd5HashDetails(SSOID + "|" + SESSIONID);
 
-			logger.info("getSSOLoginResponseInfornation, generatedMD5CheckSum :" + generatedMD5CheckSum);
+			logger.debug("getSSOLoginResponseInfornation, generatedMD5CheckSum :" + generatedMD5CheckSum);
 
 			if (CHECKSUM.equals(generatedMD5CheckSum) == true) {
 				InetAddress ipAddr = InetAddress.getLocalHost();
@@ -1451,10 +1416,10 @@ public class BillController {
 		} catch (Exception e) {
 
 			logger.error("getSSOLoginResponseInfornation , exception in paring json info ," + e.getMessage());
-			logger.info("getSSOLoginResponseInfornation, SSOI= " + SSOID + " , SESSIONID= " + SESSIONID
+			logger.debug("getSSOLoginResponseInfornation, SSOI= " + SSOID + " , SESSIONID= " + SESSIONID
 					+ " , CHECKSUM= " + CHECKSUM + " , ISVALID= " + ISVALID);
 
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		return "redirect:login";
 	}
@@ -1475,7 +1440,7 @@ public class BillController {
 		} catch (Exception e) {
 			formatter.close();
 			logger.error("BillController, Exception in getting GetMd5Hash : " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		} finally {
 			formatter.close();
 		}
@@ -1483,174 +1448,11 @@ public class BillController {
 		return mD5CheckSum;
 	}
 
-
-	@RequestMapping(value = "/fetchRation", method = RequestMethod.GET)
-	public ModelAndView fetchRation(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		 
-		//System.out.println("calling fetch.....");
-		logger.debug("calling fetch.....");
-			
-		 ModelAndView m1=new ModelAndView();
-		 
-		 List<RationBean> list = new ArrayList<>();
-		 
-		 String s=null;
-		 
-		String id=req.getParameter("District_code");
-		String value=req.getParameter("khasra");
-		
-		
-		req.setCharacterEncoding("utf-8");
-		res.setCharacterEncoding("utf-8");
-				
-		String requestUrl="https://api.sewadwaar.rajasthan.gov.in/app/live/epdsService/fetchration/ePDS/getDetail/"+id+"/"+value+"/json?client_id="+CLIENTID_EMITRA_ID_PROD;
-		
-		
-		try {
-			URL url = new URL(requestUrl);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.setDoOutput(true);
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Accept", "application/json");
-			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-			int responseCode = connection.getResponseCode();
-			if (responseCode != 200) {
-				logger.info("getDetails, response code : " + responseCode + " due to API server error");
-			} else {
-				logger.info("getDetails, response code : " + responseCode);
-				/*
-				BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream() , StandardCharsets.UTF_8));
-				
-				StringBuffer jsonString = new StringBuffer();
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}*/
-				
-				br = new BufferedReader(new InputStreamReader(connection.getInputStream() , StandardCharsets.UTF_8));
-				
-				StringBuffer jsonString = new StringBuffer();
-				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
-					jsonString.append(inputLine);
-				}			
-
-				s = new String(jsonString);				
-				JSONParser parser = new JSONParser();
-				//JSONObject json;
-				//System.out.println("value--->"+s);
-				logger.debug("value--->"+s);
-				//JSONArray array = new JSONArray();
-				
-
-				JSONObject json1 = new JSONObject();
-				json1 = (JSONObject) parser.parse(s);
-				
-				//org.json.simple.JSONArray obj = (org.json.simple.JSONArray) parser.parse(s);
-								
-				//JSONObject json1 = new JSONObject();
-
-				int length1 = json1.size();
-//				for (int i = 1; i <= length1; i++) {
-					RationBean Info = new RationBean();
-					JSONObject detail = new JSONObject();
-
-					detail = (JSONObject) json1.get("detail");
-					JSONObject fpsDetail = new JSONObject();
-					fpsDetail = (JSONObject) detail.get("fpsDetail");
-					//json1 = (JSONObject) json1.get(i);
-					
-					String fpsCode = String.valueOf(fpsDetail.get("fpsCode"));
-					String fpsOwnerName = String.valueOf(fpsDetail.get("fpsOwnerName"));
-					String fpsAddress = String.valueOf(fpsDetail.get("fpsAddress"));					
-					String fpsBlock = String.valueOf(fpsDetail.get("fpsBlock"));
-					String fpsDistrict = String.valueOf(fpsDetail.get("fpsDistrict"));
-					
-					JSONObject rcDetail = new JSONObject();
-					rcDetail = (JSONObject) detail.get("rcDetail");
-					
-					String categoryName = String.valueOf(rcDetail.get("categoryName"));
-					String nfsa = String.valueOf(rcDetail.get("nfsa"));
-					String houseNameNo = String.valueOf(rcDetail.get("houseNameNo"));
-					
-					String colonyStreet= String.valueOf(rcDetail.get("colonyStreet"));
-					String tehsil= String.valueOf(rcDetail.get("tehsil"));
-					String district= String.valueOf(rcDetail.get("district"));
-					String pin= String.valueOf(rcDetail.get("pin"));
-					String state= String.valueOf(rcDetail.get("state"));					
-					String rationCardNumber = String.valueOf(rcDetail.get("rationCardNumber"));					
-					String rationName = String.valueOf(rcDetail.get("rationCardName"));
-					
-					List<FamilyDetail> familyDetailList = new ArrayList<FamilyDetail>();
-					JSONArray familyDetail = (JSONArray) rcDetail.get("familyDetail");
-					
-					for (int counter = 0; counter < familyDetail.size(); counter++) {
-						JSONObject family = new JSONObject();
-						family = (JSONObject) familyDetail.get(counter);
-						FamilyDetail familyDetailBean = new FamilyDetail();
-						
-						familyDetailBean.setAadharID(String.valueOf(family.get("aadharID")));
-						familyDetailBean.setAge(String.valueOf(family.get("age")));
-						familyDetailBean.setBhamashahID(String.valueOf(family.get("bhamashahID")));
-						familyDetailBean.setGender(String.valueOf(family.get("gender")));
-						familyDetailBean.setMemberNameEN(String.valueOf(family.get("memberNameEN")));
-						familyDetailBean.setMemberNameHI(String.valueOf(family.get("memberNameHI")));
-						familyDetailBean.setMemberRelationEN(String.valueOf(family.get("memberRelationEN")));
-						familyDetailBean.setMemberRelationHI(String.valueOf(family.get("memberRelationHI")));
-						familyDetailBean.setRunningNumber(String.valueOf(family.get("runningNumber")));
-						
-						familyDetailList.add(familyDetailBean);
-					}
-
-					Info.setFpsCode(fpsCode);
-					Info.setFpsOwnerName(fpsOwnerName);
-					Info.setFpsAddress(fpsAddress);
-					Info.setFpsBlock(fpsBlock);
-					Info.setFpsDistrict(fpsDistrict);			
-					
-					Info.setCategoryName(categoryName);
-					Info.setNfsa(nfsa);
-					Info.setHouseNameNo(houseNameNo);
-					
-					Info.setColonyStreet(colonyStreet);
-					Info.setTehsil(tehsil);
-					Info.setDistrict(district);
-					Info.setPin(pin);
-					Info.setState(state);
-					
-					Info.setRationCardName(rationName);
-					Info.setRationCardNumber(rationCardNumber);
-					Info.setFamilyDetail(familyDetailList);
-					list.add(Info);
-				
-				req.setAttribute("list", list);				
-				}
-		} catch (Exception e) {
-			logger.error("BillController, Exception in fetchRation :"+e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
-			try {
-			br.close();
-			}
-			catch (IOException e) {
-				logger.error("IO Exception");
-		}
-		}
-	
-		
-		m1.addObject("s", s);
-		m1.setViewName("FetchRationDetails");
-		return m1;
-	}
-
 	@RequestMapping(value = "/jamabandiRecord")
-	public ModelAndView jamabandiRecord(HttpServletRequest req , Bill bill) {
-		
-//		int langCode = bill.getLangCode();
+	public ModelAndView jamabandiRecord(HttpServletRequest req, Bill bill) {
+
 		String pageName = bill.getServiceProviderPage();
-		
+
 		String requestUrl = "https://api.sewadwaar.rajasthan.gov.in/app/live/eSeva/Prod/Service/District/Master/getDetails?State_Code=08&User_Name=ws_eseva&Password=ws_eseva%23789&client_id=96f2ea05-8742-401d-aa42-ec269f8a71c0";
 		try {
 			URL url = new URL(requestUrl);
@@ -1663,25 +1465,25 @@ public class BillController {
 			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
-				logger.info(pageName +", response code : " + responseCode + " due to API server error");
+				logger.debug(pageName + ", response code : " + responseCode + " due to API server error");
 			} else {
-				logger.info(pageName +", response code : " + responseCode);
-				
-				/*BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				StringBuffer jsonString = new StringBuffer();
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}*/
+				logger.debug(pageName + ", response code : " + responseCode);
+
+				/*
+				 * BufferedReader br = new BufferedReader(new
+				 * InputStreamReader(connection.getInputStream())); StringBuffer jsonString =
+				 * new StringBuffer(); String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
 
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuffer jsonString = new StringBuffer();
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}				
+				}
 
 				String s = new String(jsonString);
-				logger.info(pageName +", getting JSON details ::" + s);
+				logger.debug(pageName + ", getting JSON details ::" + s);
 				JSONParser parser = new JSONParser();
 				JSONObject json;
 				String s1[] = s.split("\"DocumentElement\":");
@@ -1714,21 +1516,19 @@ public class BillController {
 				req.setAttribute("list", list);
 			}
 		} catch (Exception e) {
-			logger.error(pageName +", Exception msg :: " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			logger.error(pageName + ", Exception msg :: " + e.getMessage());
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
-		}
+			}
 		}
 		return new ModelAndView(pageName);
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getTehsilByDistrict", method = RequestMethod.GET)
 	public void getTehsilByDistrict(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		String distcode = req.getParameter("distcode").trim();
@@ -1748,21 +1548,20 @@ public class BillController {
 			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
-				logger.info("getTehsilByDistrict, response code : " + responseCode + " due to API server error");
+				logger.debug("getTehsilByDistrict, response code : " + responseCode + " due to API server error");
 			} else {
-				logger.info("getTehsilByDistrict, response code : " + responseCode);
-	/*			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				StringBuffer jsonString = new StringBuffer();
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}
-	*/
+				logger.debug("getTehsilByDistrict, response code : " + responseCode);
+				/*
+				 * BufferedReader br = new BufferedReader(new
+				 * InputStreamReader(connection.getInputStream())); StringBuffer jsonString =
+				 * new StringBuffer(); String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuffer jsonString = new StringBuffer();
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}	
+				}
 
 				String s = new String(jsonString);
 				JSONParser parser = new JSONParser();
@@ -1796,25 +1595,25 @@ public class BillController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("BillController,Exception in getTehsilByDistrict : "+e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			logger.error("BillController,Exception in getTehsilByDistrict : " + e.getMessage());
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
+		try {
+			pw = res.getWriter();
+		} finally {
+			pw.print(array);
+			pw.flush();
+			pw.close();
 		}
-	
-		PrintWriter pw = res.getWriter();
-		pw.print(array);
-		pw.flush();
-		pw.close();
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getVillageByTehsil", method = RequestMethod.GET)
 	public void getVillageByTehsil(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		String distcode = req.getParameter("distcode").trim();
@@ -1835,22 +1634,21 @@ public class BillController {
 			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
-				logger.info("getVillageByTehsil, response code : " + responseCode + " due to API server error");
+				logger.debug("getVillageByTehsil, response code : " + responseCode + " due to API server error");
 			} else {
-				logger.info("getVillageByTehsil, response code : " + responseCode);
-				
-				/*BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				StringBuffer jsonString = new StringBuffer();
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}
-				*/
+				logger.debug("getVillageByTehsil, response code : " + responseCode);
+
+				/*
+				 * BufferedReader br = new BufferedReader(new
+				 * InputStreamReader(connection.getInputStream())); StringBuffer jsonString =
+				 * new StringBuffer(); String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuffer jsonString = new StringBuffer();
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}				
+				}
 
 				String s = new String(jsonString);
 				JSONParser parser = new JSONParser();
@@ -1879,32 +1677,33 @@ public class BillController {
 				}
 			}
 		} catch (Exception e) {
-			logger.info("BillController, Exception in getVillageByTehsilException, getVillageByTehsilException : " + e.getMessage());
-		}
-		finally
-		{
+			logger.error("BillController, Exception in getVillageByTehsilException, getVillageByTehsilException : "
+					+ e.getMessage());
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
-		}	
-		PrintWriter pw = res.getWriter();
-		pw.print(array);
-		pw.flush();
-		pw.close();
+		try {
+			pw = res.getWriter();
+		} finally {
+			pw.print(array);
+			pw.flush();
+			pw.close();
+		}
 	}
 
 	@RequestMapping(value = "/jamabandiservice", method = RequestMethod.POST)
 	public ModelAndView jamabandiservice(Model model, Bill bill, Jamabandi jam, HttpServletRequest req)
 			throws SQLException {
-		
+
 		bill.setServiceProviderID(2354);
 		bill.setSsoID(Login.SSOID);
 		int langCode = Integer.parseInt(req.getParameter("langCode"));
 		EncrptDesryptDataService encryptService = new EncrptDesryptDataService();
-		logger.info("district" + jam.getDistrict_code() + "tehsil" + jam.getTehsil_code() + "village code"
+		logger.debug("district" + jam.getDistrict_code() + "tehsil" + jam.getTehsil_code() + "village code"
 				+ jam.getVillage_code() + "khasra" + jam.getKhasra());
 		String uname = "ws_eseva";
 		String pwd = "ws_eseva%23789";
@@ -1918,14 +1717,14 @@ public class BillController {
 
 		try {
 			encryptData = encryptService.sendPostForJamabandiData(strToEncrypt);
-			logger.info("jamabandiservice details ::" + encryptData);
+			logger.debug("jamabandiservice details ::" + encryptData);
 			req.setAttribute("details", encryptData);
 			logger.debug("jamabandiservice, encryptData  :" + encryptData);
 			String s[] = encryptData.split("\"ROR\":");
 
 			JSONParser parser = new JSONParser();
 			JSONObject json;
-			
+
 			List<Jamabandi> list = new ArrayList<Jamabandi>();
 			for (int i = 1; i < s.length; i++) {
 				json = (JSONObject) parser.parse(s[i].substring(0, s[i].length() - 1));
@@ -1994,23 +1793,13 @@ public class BillController {
 		} catch (Exception e) {
 
 			logger.error("BillController, Exception in jamabandiservice for getting encrypt data :" + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 
 		if (langCode == 0)
 			return new ModelAndView("JamabandiDetails");
 		else
 			return new ModelAndView("JamabandiDetailsHi");
-	}
-
-	@RequestMapping(value = "/examservice")
-	public ModelAndView examservice(HttpServletRequest req, HttpServletResponse response) {
-		return new ModelAndView("Exam");
-	}
-
-	@RequestMapping(value = "/examservicehi")
-	public ModelAndView examservicehi(HttpServletRequest req, HttpServletResponse response) {
-		return new ModelAndView("ExamHi");
 	}
 
 	@RequestMapping(value = "/examserviceDetails", method = RequestMethod.POST)
@@ -2031,25 +1820,24 @@ public class BillController {
 			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 			int responseCode = connection.getResponseCode();
 			if (responseCode != 200) {
-				logger.info("examServiceDetails, response code : " + responseCode + " due to API server error");
+				logger.debug("examServiceDetails, response code : " + responseCode + " due to API server error");
 			} else {
-				logger.info("examServiceDetails, response code : " + responseCode);
-	
-/*				BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				StringBuffer jsonString = new StringBuffer();
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}
-*/
+				logger.debug("examServiceDetails, response code : " + responseCode);
+
+				/*
+				 * BufferedReader br = new BufferedReader(new
+				 * InputStreamReader(connection.getInputStream())); StringBuffer jsonString =
+				 * new StringBuffer(); String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
 				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuffer jsonString = new StringBuffer();
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}			
+				}
 
 				String s = new String(jsonString);
-				logger.info("examServiceDetails, getting JSON details ::" + s);
+				logger.debug("examServiceDetails, getting JSON details ::" + s);
 				JSONParser parser = new JSONParser();
 				JSONObject json;
 				json = (JSONObject) parser.parse(s);
@@ -2094,18 +1882,14 @@ public class BillController {
 			}
 		} catch (Exception e) {
 			logger.error("BillController, examServiceDetails, Exception msg :: " + e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
-		}
-	
 
 		if (bill.getLangCode() == 0)
 			return new ModelAndView("ExamDetails");
@@ -2126,19 +1910,19 @@ public class BillController {
 			properties.load(input);
 			String versionNo = properties.getProperty("version_no");
 			String versionDate = properties.getProperty("version_date");
-			logger.info("Version Properties , Version No : " + versionNo + " Version Date : " + versionDate);
+			logger.debug("Version Properties , Version No : " + versionNo + " Version Date : " + versionDate);
 			BASE64Decoder decoder = new BASE64Decoder();
 			try {
 				versionNo = new String(decoder.decodeBuffer(versionNo));
 				versionDate = new String(decoder.decodeBuffer(versionDate));
 			} catch (IOException e) {
-				
-				logger.error("BillController, Exception in checkVersionStatus : "+e.getMessage());
-				/*e.printStackTrace();*/
+
+				logger.error("BillController, Exception in checkVersionStatus : " + e.getMessage());
+				/* e.printStackTrace(); */
 			}
 
 			double version_number = Double.parseDouble(versionNo);
-			logger.info("Version Properties , Version No : " + version_number + " Version Date : " + versionDate);
+			logger.debug("Version Properties , Version No : " + version_number + " Version Date : " + versionDate);
 			LatestVersionDetails latestVersion = billService.versionCheck();
 
 			if (version_number == latestVersion.getVersionNo() && (versionDate.equals(latestVersion.getCreatedDate())))
@@ -2148,7 +1932,7 @@ public class BillController {
 
 		} catch (Exception e) {
 			logger.error("BillController, Exception in checkVersion for getting Connection " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		return flag;
 	}
@@ -2158,12 +1942,12 @@ public class BillController {
 		try {
 			MachineAuth machi = billService.getMachineAuthenticationDetails(Login.SSOID);
 			String machineId = machi.getMachineId();
-			logger.info("MachineId : " + machineId);
+			logger.debug("MachineId : " + machineId);
 			req.setAttribute("MachineId", machineId);
 
 		} catch (Exception e) {
 			logger.error("BillController, Exception in machineIntegration: " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		return new ModelAndView("MachineSSOAuth");
 	}
@@ -2181,7 +1965,7 @@ public class BillController {
 		String SERIALNO = mach1.getMachineId();
 		String SSOID = Login.SSOID;
 
-		logger.info("getMachineAuth, MachineId :" + SERIALNO + " SSOID :" + SSOID);
+		logger.debug("getMachineAuth, MachineId :" + SERIALNO + " SSOID :" + SSOID);
 
 		String result = "";
 
@@ -2191,20 +1975,20 @@ public class BillController {
 			InputStream input = this.getClass().getResourceAsStream("../versionDetail.properties");
 			properties.load(input);
 			String versionNo = properties.getProperty("version_no");
-			logger.info("Version Properties , Version No : " + versionNo);
+			logger.debug("Version Properties , Version No : " + versionNo);
 			BASE64Decoder decoder = new BASE64Decoder();
 			try {
 				versionNo = new String(decoder.decodeBuffer(versionNo));
 			} catch (IOException e) {
-				logger.error("BillController, Exception in getMachineAuth : "+e.getMessage());
-				/*e.printStackTrace();*/
+				logger.error("BillController, Exception in getMachineAuth : " + e.getMessage());
+				/* e.printStackTrace(); */
 			}
 
 			String response = getMachineAuthStatus(SERIALNO, SSOID);
 
 			// System.out.println("getMachineAuth, response :" + trans+" for SSOID :
 			// "+SSOID+" and machine id : "+mach1.getMachineId());
-			logger.info(
+			logger.debug(
 					"response :" + response + " for SSOID : " + SSOID + " and machine id : " + mach1.getMachineId());
 
 			if (response.equals("TRUE")) {
@@ -2225,26 +2009,34 @@ public class BillController {
 						BufferedWriter bw = new BufferedWriter(fw);
 
 						bw.write(content);
-						bw.close();
+						//bw.close();
 					} catch (Exception e) {
-						logger.debug("BillController, Error : "+e.getMessage());
-						//System.out.println(e);
+						logger.debug("BillController, Error : " + e.getMessage());
+						// System.out.println(e);
 					}
-				} catch (Exception e) {
+					finally {
+						try {
+
+							br.close();
+						} catch (IOException e) {
+							logger.error("IO Exception");
+						}
+					}
+				} catch (Exception e1) {
 					result = "MachineSSOAuth";
-					req.setAttribute("BillController, error", "2"+e.getMessage());
-					/*e.printStackTrace();*/
+					req.setAttribute("BillController, error", "2" + e1.getMessage());
+					/* e.printStackTrace(); */
 				}
 			} else {
 				result = "MachineSSOAuth";
 				req.setAttribute("error", "1");
 			}
 
-		} catch (Exception e) {
+		} catch (Exception e2) {
 			result = "MachineSSOAuth";
 			req.setAttribute("error", "2");
-			logger.error("BillController, getMachineAuth, Exception :" + e.getMessage());
-			/*e.printStackTrace();*/
+			logger.error("BillController, getMachineAuth, Exception :" + e2.getMessage());
+			/* e.printStackTrace(); */
 		}
 
 		return new ModelAndView(result);
@@ -2303,7 +2095,7 @@ public class BillController {
 
 		} catch (Exception e) {
 			logger.error("BillController, Exception in DigitSecurepaymentChecksum: " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		} finally {
 			formatter.close();
 		}
@@ -2334,15 +2126,15 @@ public class BillController {
 				+ "\"," + "\"UDF3\": \"sample 3\"," + "\"OFFICECODE\": \"HQ\","
 				+ "\"REVENUEHEAD\": \"ProductFee-100.00|MerchantComm-26.00\"," + "\"CHECKSUM\": \"" + checkSum + "\"}";
 
-		logger.info("digitSecurePaymentEncDetails, Original String = " + toBeEncryptedString);
+		logger.debug("digitSecurePaymentEncDetails, Original String = " + toBeEncryptedString);
 		if (bill.getYesorno() == 3) {
 			encryptedString = encryptCardDetails(digitSecureEncryptionKey, toBeEncryptedString); // Encrypting the
 																									// string
 			decryptedString = decryptCardDetails(digitSecureEncryptionKey, encryptedString); // Decrypting the string
 		}
 
-		logger.info("digitSecurePaymentEncDetails, Encrypted String = " + encryptedString);
-		logger.info("digitSecurePaymentEncDetails, Decrypted String = " + decryptedString);
+		logger.debug("digitSecurePaymentEncDetails, Encrypted String = " + encryptedString);
+		logger.debug("digitSecurePaymentEncDetails, Decrypted String = " + decryptedString);
 		return encryptedString;
 	}
 
@@ -2353,7 +2145,7 @@ public class BillController {
 		String merchantcode = req.getParameter("MERCHANTCODE");
 		String encdata = req.getParameter("ENCDATA");
 		String status = req.getParameter("STATUS");
-		logger.info("getCardDetailsAfterPayment, merchantcode : " + merchantcode + " status : " + status);
+		logger.debug("getCardDetailsAfterPayment, merchantcode : " + merchantcode + " status : " + status);
 
 		if (merchantcode.equalsIgnoreCase(yesCardMerchantCode))
 			cardDecryptedDetails = decryptCardDetails(yesCardEncryptionKey, encdata);
@@ -2364,7 +2156,7 @@ public class BillController {
 		else if (merchantcode.equalsIgnoreCase(digitSecureMerchantCode))
 			cardDecryptedDetails = decryptCardDetails(digitSecureEncryptionKey, encdata);
 
-		logger.info("getCardDetailsAfterPayment, cardDecryptedDetails : " + cardDecryptedDetails);
+		logger.debug("getCardDetailsAfterPayment, cardDecryptedDetails : " + cardDecryptedDetails);
 		boolean isCheckSumFlag = false;
 		String UDF2 = "";
 		JSONParser parser = new JSONParser();
@@ -2415,7 +2207,7 @@ public class BillController {
 			String serviceid = String.valueOf(billdetails.get(0).getServiceProviderID());
 			String transactionid = billdetails.get(0).getTransactionId();
 
-			logger.info("getCardDetailsAfterPayment, amt :" + amt + " serviceid :" + serviceid + " transactionid :"
+			logger.debug("getCardDetailsAfterPayment, amt :" + amt + " serviceid :" + serviceid + " transactionid :"
 					+ transactionid);
 			if (!STATUS.equalsIgnoreCase("SUCCESS") && !RESPONSECODE.equals("00") && PAYMENTMODE.equals("NA")) {
 				logger.info("getCardDetailsAfterPayment, Card Payment Error Occured");
@@ -2453,25 +2245,25 @@ public class BillController {
 
 				} catch (Exception e) {
 					generatedCheckSum = "";
-					/*e.printStackTrace();*/
-					formatter.close();
+					/* e.printStackTrace(); */
+					//formatter.close();
 					logger.error("getCardDetailsAfterPayment Exception in generating checksum, generatedCheckSum :"
 							+ generatedCheckSum + " exception :" + e.getMessage());
 				} finally {
 					formatter.close();
 				}
 
-				logger.info("getCardDetailsAfterPayment, generatedCheckSum : " + generatedCheckSum);
+				logger.debug("getCardDetailsAfterPayment, generatedCheckSum : " + generatedCheckSum);
 
 				if (generatedCheckSum.equals(CHECKSUM)) {
 					isCheckSumFlag = true;
 				}
 
-				logger.info("getCardDetailsAfterPayment, isCheckSumFlag : " + isCheckSumFlag + " RPPTXNID: " + RPPTXNID
+				logger.debug("getCardDetailsAfterPayment, isCheckSumFlag : " + isCheckSumFlag + " RPPTXNID: " + RPPTXNID
 						+ " STATUS: " + STATUS + " RESPONSECODE: " + RESPONSECODE + ": PAYMENTMODE : " + PAYMENTMODE);
 				if (STATUS.equalsIgnoreCase("SUCCESS") && RESPONSECODE.equals("00") && !PAYMENTMODE.equals("NA")
 						&& isCheckSumFlag) {
-					logger.info("getCardDetailsAfterPayment, payment status :" + isCheckSumFlag);
+					logger.debug("getCardDetailsAfterPayment, payment status :" + isCheckSumFlag);
 					billService.updateTransactionDetails(PRN);
 
 					String result = backToBackCardTrans(amt, transactionid, serviceid, MERCHANTCODE, RPPTXNID,
@@ -2488,7 +2280,7 @@ public class BillController {
 		} catch (Exception e) {
 			backToBackStatus = "";
 			logger.error("BillController, Exception in getCardDetailsAfterPayment: " + e.getMessage());
-			/*e.printStackTrace();*/
+			/* e.printStackTrace(); */
 		}
 		if (backToBackStatus.equalsIgnoreCase("success")) {
 			if (UDF2.equals("0"))
@@ -2501,16 +2293,6 @@ public class BillController {
 			else
 				return new ModelAndView("paymentErrorHi");
 		}
-	}
-
-	@RequestMapping(value = "/GrievanceStatus")
-	public ModelAndView GrievanceStatus(HttpServletRequest req, HttpServletResponse response) {
-		return new ModelAndView("GrievanceStatus");
-	}
-
-	@RequestMapping(value = "/GrievanceStatusHi")
-	public ModelAndView GrievanceStatusHi(HttpServletRequest req, HttpServletResponse response) {
-		return new ModelAndView("GrievanceStatusHi");
 	}
 
 	@RequestMapping(value = "/GrievanceStatusDetails", method = RequestMethod.GET)
@@ -2538,22 +2320,21 @@ public class BillController {
 			int responseCode = connection.getResponseCode();
 			StringBuffer jsonString = new StringBuffer();
 			if (responseCode != 200) {
-				logger.info("GrievanceStatusDetails, response code : " + responseCode + " due to API server error");
+				logger.debug("GrievanceStatusDetails, response code : " + responseCode + " due to API server error");
 			} else {
-				logger.info("GrievanceStatusDetails, response code : " + responseCode);
-				
-				/*BufferedReader br = new BufferedReader(
-						new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+				logger.debug("GrievanceStatusDetails, response code : " + responseCode);
 
-				String line;
-				while ((line = br.readLine()) != null) {
-					jsonString.append(line);
-				}
-*/				
-				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));				
+				/*
+				 * BufferedReader br = new BufferedReader( new
+				 * InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+				 * 
+				 * String line; while ((line = br.readLine()) != null) {
+				 * jsonString.append(line); }
+				 */
+				br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					jsonString.append(inputLine);
-				}				
+				}
 
 				String hindiStr = StringEscapeUtils.unescapeJava(jsonString.toString());
 
@@ -2621,19 +2402,17 @@ public class BillController {
 				req.setAttribute("Subject", new String(((String) json1.get("Subject")).getBytes(), "UTF-8"));
 			}
 		} catch (Exception e) {
-			logger.error("BillController, GrievanceStatusDetails, Exception msg :: Data Not Found!Please input valid Details "+e.getMessage());
-			/*e.printStackTrace();*/
-		}
-		finally
-		{
+			logger.error(
+					"BillController, GrievanceStatusDetails, Exception msg :: Data Not Found!Please input valid Details "
+							+ e.getMessage());
+			/* e.printStackTrace(); */
+		} finally {
 			try {
-			br.close();
-			}
-			catch (IOException e) {
+				br.close();
+			} catch (IOException e) {
 				logger.error("IO Exception");
+			}
 		}
-		}
-	
 
 		req.setAttribute("list", list);
 
@@ -2683,23 +2462,7 @@ public class BillController {
 
 		return new ModelAndView("Information");
 	}
-	
-/*	@RequestMapping(value = "/InformationPanchayatService")
-	public ModelAndView newServiceProvider(Model model, HttpServletRequest req) {
-		return new ModelAndView("InformationPanchayatService");
-	}
 
-	@RequestMapping(value = "/InformationPanchayatServiceHi")
-	public ModelAndView newServiceProviderHi(Model model, HttpServletRequest req) {
-		return new ModelAndView("InformationPanchayatServiceHi");
-	}
-*/
-	/*
-	@RequestMapping(value = "/newInformationHi")
-	public ModelAndView newServiceProviderHi(Model model, HttpServletRequest req) {
-		return new ModelAndView("newInformationHi");
-	}
-*/
 	@RequestMapping(value = "/rationshopservice")
 	public ModelAndView rationShopServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("rationshopservice");
@@ -2709,17 +2472,7 @@ public class BillController {
 	public ModelAndView rationShopServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("rationshopserviceHi");
 	}
-	
-	@RequestMapping(value = "/rationcardservice")
-	public ModelAndView rationCardServiceProvider(Model model, HttpServletRequest req) {
-		return new ModelAndView("rationcardservice");
-	}
 
-	@RequestMapping(value = "/rationcardserviceHi")
-	public ModelAndView rationCardServiceProviderHi(Model model, HttpServletRequest req) {
-		return new ModelAndView("rationcardserviceHi");
-	}
-	
 	@RequestMapping(value = "/kioskinformationservice")
 	public ModelAndView kioskInformationServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("kioskinformationservice");
@@ -2729,7 +2482,7 @@ public class BillController {
 	public ModelAndView kioskInformationServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("kioskinformationserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/socialsecurityservice")
 	public ModelAndView socialSecurityServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("socialsecurityservice");
@@ -2739,7 +2492,7 @@ public class BillController {
 	public ModelAndView socialSecurityServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("socialsecurityserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/naregaservice")
 	public ModelAndView naregaServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("naregaservice");
@@ -2749,7 +2502,7 @@ public class BillController {
 	public ModelAndView naregaServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("naregaserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/employeeservice")
 	public ModelAndView employeeServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("employeeservice");
@@ -2759,7 +2512,7 @@ public class BillController {
 	public ModelAndView employeeServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("employeeserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/bhamasacardservice")
 	public ModelAndView bhamasaCardServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("bhamasacardservice");
@@ -2769,7 +2522,7 @@ public class BillController {
 	public ModelAndView bhamasaCardServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("bhamasacardserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/disableservice")
 	public ModelAndView disableServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("disableservice");
@@ -2779,7 +2532,7 @@ public class BillController {
 	public ModelAndView disableServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("disableserviceHi");
 	}
-	
+
 	@RequestMapping(value = "/swasthyabimaservice")
 	public ModelAndView swasthyaBimaServiceProvider(Model model, HttpServletRequest req) {
 		return new ModelAndView("swasthyabimaservice");
@@ -2789,7 +2542,6 @@ public class BillController {
 	public ModelAndView swasthyaBimaServiceProviderHi(Model model, HttpServletRequest req) {
 		return new ModelAndView("swasthyabimaserviceHi");
 	}
-	
 
 	@RequestMapping(value = "/foodsecurityservice")
 	public ModelAndView foodSecurityServiceProvider(Model model, HttpServletRequest req) {

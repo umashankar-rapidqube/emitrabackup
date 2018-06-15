@@ -42,19 +42,19 @@ public class Config extends HttpServlet {
 		String trnsDate=request.getParameter("transcationDate");
 		String sname=request.getParameter("serviceProviderName");
 		String paymentMode=request.getParameter("paymentMode");
-		logger.info("BankRefNumber::"+bankRefNumber+"name::"+name+" trnsid:::"+trnsid+" mobile::"+mobile+" acutual::"+actualAmount+" payable::"+payableAmount+" Date::"+trnsDate+" serviceProviderName::"+sname);
+		logger.debug("BankRefNumber::"+bankRefNumber+"name::"+name+" trnsid:::"+trnsid+" mobile::"+mobile+" acutual::"+actualAmount+" payable::"+payableAmount+" Date::"+trnsDate+" serviceProviderName::"+sname);
 		
 		String printData="\r\n TranscationId:"+trnsid+"\r\n Name:"+name+"\r\n Service Name:"+sname+"\r\n Consumer Key:"+mobile+" \r\n Bill Amount:"+actualAmount+" \r\n Payment Mode:"+paymentMode+" \r\n Paid Amount:"+payableAmount+
 				"\r\n Reference Number:"+bankRefNumber+"\r\n Date:"+trnsDate+"\r\n\r\n\r\n\r\n\r\n";
 		
-		logger.info("Transcation print details ::"+printData);
+		logger.debug("Transcation print details ::"+printData);
 		String printLogoPath= null, absoluteDiskPath=null;
 		try {
 			absoluteDiskPath = getServletContext().getRealPath("/resources/img");
 			//failIfDirectoryTraversal(absoluteDiskPath);
 			File file = new File(absoluteDiskPath, "javapos.bmp");
 			printLogoPath = file.getCanonicalPath();
-			logger.info("Receipt_Printer Logo Path :: "+printLogoPath+" absoluteDiskPath : "+absoluteDiskPath);
+			logger.debug("Receipt_Printer Logo Path :: "+printLogoPath+" absoluteDiskPath : "+absoluteDiskPath);
 			
 		} catch (IOException e) {
 			logger.error("Config, Transcation print exception ::"+e.getMessage());
@@ -69,11 +69,12 @@ public class Config extends HttpServlet {
 		POSPrinter ptr = null;
 		ptr = new POSPrinter();
 		try {
-			logger.info("JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME :: "+JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME);
+			logger.debug("JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME :: "+JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME);
 			
 			System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "C:\\BIXOLONJavaPOS\\jpos.xml");
 		//	logger.info("Receipt_Printer Logo Path 111111");
 			ptr.open("SRP-330");
+//			ptr.open("SRP-350III");
 		//	logger.info("Receipt_Printer Logo Path 222222");
 			
 			ptr.claim(0);																						
@@ -98,11 +99,18 @@ public class Config extends HttpServlet {
 		//	 logger.info("Receipt_Printer Logo Path 99999");
 				
 			 ptr.release();
-			 ptr.close();
+			// ptr.close();
 			 
 		} catch (JposException e) {
 			logger.error("Config, Receipt Printer Exception ::"+e.getMessage());
 			/*e.printStackTrace();*/
+		}
+		finally {
+			try {
+				ptr.close();
+			} catch (JposException e1) {
+				logger.error("Config, Receipt Printer Exception");
+			}
 		}
 	}
 	//method to avoid path traversal

@@ -38,6 +38,7 @@ public class RDSample {
 	private String capturepath = "";
 	private boolean isRDFound = false;
 	BufferedReader rd;
+	final int MAX_SIZE = 200000;
 
 	static final Logger logger = Logger.getLogger(RDSample.class);
 
@@ -92,14 +93,14 @@ public class RDSample {
 				 * res += line; }
 				 */
 
-				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()),MAX_SIZE);
 				String res = null;
 				for (String inputLine = rd.readLine(); inputLine != null; inputLine = rd.readLine()) {
 					res += inputLine;
 				}
 
 				RDService rdService = serializable.read(RDService.class, res);
-				rd.close();
+			//	rd.close();
 				if (rdService.info.contains(strRDName)) // Found
 				{
 					isRDFound = true;
@@ -159,14 +160,14 @@ public class RDSample {
 					res += line;
 				}
 				*/
-				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()),MAX_SIZE);
 				String res =null;
 				for (String inputLine = rd.readLine(); inputLine != null; inputLine = rd.readLine()) {
 					res += inputLine;
 				}	
 				
 				strResponse = res.toString();
-				rd.close();
+				//rd.close();
 			} catch (Exception e) {
 				logger.error("RDSample, Exception in MyDeviceInfo : " + e.getMessage());
 				/* e.printStackTrace(); */
@@ -201,14 +202,14 @@ public class RDSample {
 				HttpUriRequest request = builder.setEntity(new ByteArrayEntity(pidOptions.getBytes("UTF-8"))).build();
 				HttpClient client = new DefaultHttpClient();
 				HttpResponse response = client.execute(request);
-				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+				rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()),MAX_SIZE);
 				String res =null;
 				for (String inputLine = rd.readLine(); inputLine != null; inputLine = rd.readLine()) {
 					res += inputLine;
 				}	
 				
 				strResponse = res.toString();
-				rd.close();
+				//rd.close();
 			} catch (Exception e) {
 				logger.error("RDSample, Exception in MyDeviceInfo : " + e.getMessage());
 				/* e.printStackTrace(); */

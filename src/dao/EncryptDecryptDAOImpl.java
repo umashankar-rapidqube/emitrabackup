@@ -420,7 +420,7 @@ public class EncryptDecryptDAOImpl implements EncryptDecryptDAO {
 					}
 				}
 
-				logger.info("1::" + bill.getSsoID() + " 2::" + String.valueOf(bill.getServiceProviderID()) + " 3::"
+				logger.debug("1::" + bill.getSsoID() + " 2::" + String.valueOf(bill.getServiceProviderID()) + " 3::"
 						+ bill.getBillEmail());
 				queryDetails.addQueryParams(15, null);
 				queryDetails.addQueryParams(22, "Full Payment");
@@ -677,7 +677,7 @@ public class EncryptDecryptDAOImpl implements EncryptDecryptDAO {
 				ph1.setCreatedDate(rs.optString("gettimestamp"));
 				details.add(ph1);
 			}
-			logger.info("PHED  list size :" + details.size());
+			logger.debug("PHED  list size :" + details.size());
 		} catch (Exception ex) {
 			logger.error("EncryptDecryptDAOImpl, Exception in phedDetails : " + ex.getMessage());
 		}

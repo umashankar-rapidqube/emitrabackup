@@ -62,7 +62,6 @@
 								<div class="row">
 									<div class="billmidmain ">
 										<h1 class="">माध्यमिक शिक्षा बोर्ड, अजमेर (10 वीं कक्षा) का परीक्षा विवरण  </h1>
-										
 										<center>
 											<table class="table" style="width: 50%">
 												<c:choose>
@@ -73,7 +72,6 @@
 														</tr>
 													</c:when>
 													<c:otherwise>
-
 														<tr>
 															<th>परीक्षा  वर्ष</th>
 															<td>${examyear}</td>
@@ -110,24 +108,27 @@
 															<th>जारी करने की तारिख</th>
 															<td>${DateofIssue}</td>
 														</tr>
-														<tr>
+														<%-- <tr>
 															<th>स्थिति</th>
 															<td>${Status}</td>
-														</tr>
+														</tr> --%>
 													</c:otherwise>
 												</c:choose>
-
-
 											</table>
 										</center>
 									</div>
 								</div>
-
 							</div>
 
+							<form id="spd">
+								<input type="hidden" name="langCode" id="langCode" value="1">
+								<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+							</form>
 
 							<div class="button_div">
-								<a href="examservicehi" class="panel"> <img src="img/new/back.png"></a>
+								<a href="javascript:void(0);" onclick="getSP('ExamHi')" class="panel">
+									<img src="img/new/backhindi.png">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -142,7 +143,14 @@
 	
 	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
 	  
-
+		<script type="text/javascript">
+			function getSP(pageName) {
+				$("#serviceProviderPage").val(pageName);
+				document.getElementById("spd").action = "utilityBills";
+				document.getElementById("spd").method = "post";
+				document.getElementById('spd').submit();
+			}
+		</script>
 
 </body>
 

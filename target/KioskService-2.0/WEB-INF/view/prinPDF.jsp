@@ -55,6 +55,8 @@ function printPDF(elementId) {
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	  <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
 	  <script type="text/javascript" src="js/app-inner.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	  
 	
 </body>
 

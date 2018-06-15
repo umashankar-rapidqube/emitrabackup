@@ -34,11 +34,11 @@ public class PrintReceiptController {
 			JSONObject receiptData = new JSONObject();
 		receiptData = bhamashahCardService.getPrintReceiptData("Proc_PrintCertificate" , "getPrintReceiptData" , transId);
 		if(receiptData != null && receiptData.length() > 0) {
-			logger.info("Receipt Data for printing Receipt of Certificate services :: " + receiptData);
+			logger.debug("Receipt Data for printing Receipt of Certificate services :: " + receiptData);
 			ReceiptPrint.printReciept(request , receiptData , "certificate");
 			return true;
 		} else {
-			logger.info("Error while getting receipt data of Certificate services :: " + receiptData);
+			logger.debug("Error while getting receipt data of Certificate services :: " + receiptData);
 			return false;
 		}
 	}
@@ -49,11 +49,11 @@ public class PrintReceiptController {
 		JSONObject receiptData = new JSONObject();
 		receiptData = bhamashahCardService.getPrintReceiptData("proc_kiosk" , "getprintreceiptofutility" , transId);
 		if(receiptData != null && receiptData.length() > 0) {
-			logger.info("Receipt Data for printing Receipt of other than certificate services :: " + receiptData);
+			logger.debug("Receipt Data for printing Receipt of other than certificate services :: " + receiptData);
 			ReceiptPrint.printReciept(request , receiptData , "utility");
 			return true;
 		} else {
-			logger.info("Error while getting receipt data of other than certificate services :: " + receiptData);
+			logger.debug("Error while getting receipt data of other than certificate services :: " + receiptData);
 			return false;
 		}
 	}

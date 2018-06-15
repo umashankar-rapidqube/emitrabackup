@@ -11,7 +11,8 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	    <title>Service Providers</title>
+	    <c:if test="${bill.langCode == 0}"><title>Service Providers</title></c:if>
+		<c:if test="${bill.langCode == 1}"><title>सेवा प्रदाता</title></c:if>
 	    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Nunito+Sans:600|700" rel="stylesheet" />
 	    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 	    <link rel="stylesheet" href="css/bootstrap-material-design.min.css" />
@@ -48,7 +49,9 @@
 	                                </div>
 	                                <div class="col-md-4">
 	                                    <a href="index" class="panel pull-right homebtn">
-	                                        <img src="img/new/home.png" alt="" /></a>
+											<c:if test="${bill.langCode == 0}"><img src="img/new/home.png" alt="" /></c:if>
+											<c:if test="${bill.langCode == 1}"><img src="img/new/homehindi.png" alt="" /></c:if>
+										</a>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -58,41 +61,51 @@
 	                            <div class="container main_row">
 	                                <div class="row sliderow">
 	                                    <div class="billmidmain">
-	                                    <h1 class="">UTILITY BILLS AND OTHER PAYMENTS</h1>
+	                                    	<c:if test="${bill.langCode == 0}"><h1>UTILITY BILLS AND OTHER PAYMENTS</h1></c:if>
+											<c:if test="${bill.langCode == 1}"><h1>उपयोगिता बिल और अन्य भुगतान</h1></c:if>
 		                                    <form id="spd">
-		                                    	<input type="hidden" name="langCode" id="langCode" value="0">
+		                                    	<input type="hidden" name="langCode" id="langCode" value="${bill.langCode}">
 												<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
 											</form>
 											<form method="post" id="spd1">
 												<input type="hidden" name="serviceProviderID" id="serviceProviderID" />
 												<input type="hidden" name="serviceProviderName" id="serviceProviderName" />
-												<input type="hidden" name="langCode" id="langCode" value="0">
+												<input type="hidden" name="langCode" id="langCode1" value="${bill.langCode}">
 											</form>
 	                                        <ul id="" class="servicepro slider">
 												<li>
 													<div class="oneservices">
 														<a href="javascript:void(0);"
-															onclick="getSP('Bill_Electricity')" class="panel"> <img
+															onclick="getSP('Bill_Electricity' , 'utilityBills')" class="panel"> <img
 															src="img/Logos/electricity_bills.png" alt="" />
-															<h6 style="padding-top: 20px; color: black;">ELECTRICITY</h6>
+															<h6 style="padding-top: 20px; color: black;">
+																<c:if test="${bill.langCode == 0}">ELECTRICITY</c:if>
+																<c:if test="${bill.langCode == 1}">बिजली</c:if>
+															</h6>
 														</a>
 													</div>
 												</li>
 												<li>
 													<div class="oneservices">
 														<a href="javascript:void(0);"
-															onclick="getSP('Bill_Water')" class="panel"> <img
+															onclick="getSP('Bill_Water' , 'utilityBills')" class="panel"> <img
 															src="img/Logos/water_bills.png" alt="" />
-															<h6 style="padding-top: 20px; color: black;">WATER</h6>
+															<h6 style="padding-top: 20px; color: black;">
+																<c:if test="${bill.langCode == 0}">WATER</c:if>
+																<c:if test="${bill.langCode == 1}">पानी</c:if>
+															</h6>
 														</a>
 													</div>
 												</li>
 												<li>
 													<div class="oneservices">
 														<a href="javascript:void(0);"
-															onclick="getSP('Bill_Postpaid')" class="panel"> <img
-															src="img/Logos/postpaid_bills.png" alt="" />
-															<h6 style="padding-top: 20px; color: black;">POSTPAID(Landline and Mobile)</h6>
+															onclick="getSP('Bill_Postpaid' , 'utilityBills')" class="panel">
+															<img src="img/Logos/postpaid_bills.png" alt="" />
+															<h6 style="padding-top: 20px; color: black;">
+																<c:if test="${bill.langCode == 0}">POSTPAID(Landline and Mobile)</c:if>
+																<c:if test="${bill.langCode == 1}">पोस्टपेड(लैंडलाइन और मोबाइल)</c:if>
+															</h6>
 														</a>
 													</div>
 												</li>
@@ -106,7 +119,10 @@
 														<a href="javascript:void(0);"
 															onclick="getSP1('2878','PUC Pollution Penalty Fee')" class="panel">
 															<img src="img/Logos/PUC_Service.png" alt="" />
-																<h6 style="padding-top: 20px; color: black;">PUC Pollution Penalty Fee</h6>
+															<h6 style="padding-top: 20px; color: black;">
+																<c:if test="${bill.langCode == 0}">PUC Pollution Penalty Fee</c:if>
+																<c:if test="${bill.langCode == 1}">पीयूसी पोल्यूशन पेनल्टी फीस</c:if>
+															</h6>
 														</a>
 													</div>
 												</li>
@@ -115,8 +131,14 @@
 	                                </div>
 	                            </div>
 	                            <div class="button_div">
-	                                <a href="service" class="panel">
-	                                    <img src="img/new/back.png" alt="" /></a>
+	                                <a href="javascript:void(0);" onclick="getSP('Service' , 'service')" class="panel">
+										<c:if test="${bill.langCode == 0}">
+											<img src="img/new/back.png" alt="" />
+										</c:if>
+										<c:if test="${bill.langCode == 1}">
+											<img src="img/new/backhindi.png" alt="">
+										</c:if>
+									</a>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -132,10 +154,9 @@
 		<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
 	    
 		<script type="text/javascript">
-			
-			function getSP(pageName) {
+			function getSP(pageName , actionName) {
 		    	$("#serviceProviderPage").val(pageName);
-				document.getElementById("spd").action = "utilityBills";
+				document.getElementById("spd").action = actionName;
 				document.getElementById("spd").method = "post";
 				$("#spd").submit();
 			}
@@ -147,9 +168,7 @@
 		    	document.getElementById("spd1").method = "post";
 				$("#spd1").submit();
 			}
-			
 		    $(document).ready(function () {
-		
 		        $(".servicepro").slick({
 		            dots: false,
 		            infinite: true,

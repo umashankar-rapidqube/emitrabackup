@@ -114,16 +114,19 @@
 													type="reset">RESET</button>
 											</div>
 										</form>
-
+										<form id="spd1">
+											<input type="hidden" name="langCode" id="langCode" value="0">
+											<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+										</form>
 									</div>
 
 								</div>
                          
                             </div>
                             <div class="button_div">
-                                <a href="governmentServiceProvider" class="panel">
-                                    <img src="img/new/back.png" alt=""></a>
-                                
+                                <a href="javascript:void(0);" onclick="getSP1('ViewServiceStatus')" class="panel">
+									<img src="img/new/back.png" alt="">
+								</a>
                             </div>
                         </div>
                     </div>
@@ -140,6 +143,9 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
   	<script type="text/javascript">
    	$(function() {
 		$("#checkForm").on('click',function() {
@@ -186,7 +192,12 @@
 		})
 	}); 
 	
-	
+   	function getSP1(pageName) {
+    	$("#serviceProviderPage").val(pageName);
+		document.getElementById("spd1").action = "utilityBills";
+		document.getElementById("spd1").method = "post";
+		$("#spd1").submit();
+	}
   	</script>
 </body>
 

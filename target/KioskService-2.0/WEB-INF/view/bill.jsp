@@ -102,6 +102,9 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 		<script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+		
 
 	<script>
 		$(function() {
@@ -121,7 +124,7 @@
 					data : dataToSend,
 					success : function(data) {
 						$('#d4').html(data);
-						alert(data);
+						//alert(data);
 						console.log(data);
 
 						$.ajax({
@@ -132,7 +135,7 @@
 								"userData" : printData
 							},
 							success : function(data) {
-								alert(data);
+								//alert(data);
 							},
 							error : function(xhr, status, error) {
 								//alert("Some Error Occoured..");

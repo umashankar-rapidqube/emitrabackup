@@ -64,7 +64,7 @@ public class DisabilityController {
 			req.setAttribute("otptransectionId",disability.getOtptransectionId());
 			req.setAttribute("otpstatus",disability.getOtpstatus());
 			req.setAttribute("certificateDetails",disability.getCertificateDetails());
-			logger.info("getdisabilityAuthRequest:: otp Details :  OTP Generated for Aadhaar ID "+disability.getAddhaarid());
+			logger.debug("getdisabilityAuthRequest:: otp Details :  OTP Generated for Aadhaar ID "+disability.getAddhaarid());
 			req.setAttribute("authaadhar", "Yes");
 		}
 		else {
@@ -91,7 +91,7 @@ public class DisabilityController {
 //			DisabilityServiceImpl d = new DisabilityServiceImpl();
 //			map = d.CertificateServicedisability("SAP/2017/181458", "469479675528", req);
 			 map = disabilityService.authOTP(otp, txnId, disability.getAddhaarid() ,disability.getSerialNo() , req);
-			 logger.info("getdisabilityOtpAuthChecking Response Details :"+map+" for AadhaarID : "+disability.getAddhaarid());
+			 logger.debug("getdisabilityOtpAuthChecking Response Details :"+map+" for AadhaarID : "+disability.getAddhaarid());
 			 if ("200".equalsIgnoreCase((String) map.get("STATUS_CODE")) && map.get("URL").lastIndexOf(".pdf")!=-1) {
 				 String transID = disabilityService.saveDisabilityCertificateDetails(disability);
 				 disability.setTransID(transID);
@@ -114,7 +114,7 @@ public class DisabilityController {
 				return new ModelAndView("DisabilityCertificatepdfhi");
 
 			}else if("Error".equalsIgnoreCase((String)map.get("STATUS_CODE"))){
-				logger.info("otp Details :  OTP Authenticated failed for AadhaarId : "+disability.getAddhaarid());
+				logger.debug("otp Details :  OTP Authenticated failed for AadhaarId : "+disability.getAddhaarid());
 				req.setAttribute("authaadhar", "Yes");
 				req.setAttribute("langCode", disability.getLangCode());
 				req.setAttribute("applicationno", disability.getSerialNo());
@@ -132,7 +132,7 @@ public class DisabilityController {
 					return new ModelAndView("DisabilityCertificatehi");
 				}
 			}else if("ApiException".equalsIgnoreCase((String)map.get("STATUS_CODE"))) {
-				logger.info("DisabilityCertificateService, response code : "+map.get("RESPONSE_CODE")+" due to API server error for AadhaarID : "+disability.getAddhaarid());
+				logger.debug("DisabilityCertificateService, response code : "+map.get("RESPONSE_CODE")+" due to API server error for AadhaarID : "+disability.getAddhaarid());
 				logger.error("DisabilityCertificateService, Exception msg :: " + map.get("ERROR_MESSAGE")+"for AadhaarID : "+disability.getAddhaarid());
 				if(disability.getLangCode().equalsIgnoreCase("0"))
 					return new ModelAndView("noDetailsFound");
@@ -168,7 +168,7 @@ public class DisabilityController {
 		 {
 		
 			logger.info("ServicePaymentmode :: Before flushing note value");
-			logger.info("ServicePaymentmode :: Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
+			logger.debug("ServicePaymentmode :: Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
 					+" total100note :"+NoteType.total100Note+" total200note :"+NoteType.total200Note+" total500note :"	+
 					NoteType.total500Note+" total2000note :"+NoteType.total2000Note );
 			NoteType.total10Note=0;
@@ -181,7 +181,7 @@ public class DisabilityController {
 			NoteType.cashTimer=0;
 			NoteType.depositAmount =0 ;
 			
-			logger.info("ServicePaymentmode ::After regreshing Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
+			logger.debug("ServicePaymentmode ::After regreshing Note Value, total10note :"+NoteType.total10Note+" total20note :"+NoteType.total20Note+" total50note:"+NoteType.total50Note
 					+" total100note :"+NoteType.total100Note+" total200note :"+NoteType.total200Note+" total500note :"	+
 					NoteType.total500Note+" total2000note :"+NoteType.total2000Note );
 			req.setAttribute("certiTransID", disability.getTransID());

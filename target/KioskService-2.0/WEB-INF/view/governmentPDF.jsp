@@ -70,10 +70,11 @@
 
 
 										<div class="col-md-12">
-
-											<embed src="${url1}#toolbar=0&navpanes=0&scrollbar=0"
+											<iframe  id='iframeid' src="" width="100%" height="480"
+											 type="application/pdf"></iframe>
+											<%-- <embed src="${url1}#toolbar=0&navpanes=0&scrollbar=0"
 												width="100%" height="480" alt="pdf"
-												pluginspage="http://www.adobe.com/products/acrobat/readstep2.html" />
+												pluginspage="http://www.adobe.com/products/acrobat/readstep2.html" /> --%>
 										</div>
 
 										<%--   <div class="col-md-12">
@@ -156,6 +157,9 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 	<!-- <script>
     function csd()
     {
@@ -179,6 +183,7 @@
     
     function yes()
     {
+    	$('#myModal').modal('hide');
     	$('#loading').show();
     	document.getElementById('no').disabled=true;
     }
@@ -186,6 +191,18 @@
     {
     	document.getElementById('yes').disabled=true;
     }
+    function abc(){
+    	$('#loading').show();
+    	var iframeobj = document.getElementById('iframeid');
+    	iframeobj.src= '${url1}<%-- <%= request.getAttribute("url1")%> --%>#toolbar=0&navpanes=0&scrollbar=0'
+    		setTimeout(function(){ 
+    			$('#loading').hide();
+    		}, 2000);
+	}
+   
+    setTimeout(function(){
+		 abc();
+	}, 3000);
     </script>
 
 

@@ -12,7 +12,7 @@ class MyEvents implements StatusUpdateListener {
 	static final Logger logger = Logger.getLogger("Receipt_Printer Events");
 
 	public void statusUpdateOccurred(jpos.events.StatusUpdateEvent e) {
-		logger.info("Receipt_Printer status :: "+e.getStatus());
+		logger.debug("Receipt_Printer status :: "+e.getStatus());
 		String machinestatus = "";
 		
 		switch (e.getStatus()) {
@@ -51,7 +51,7 @@ class MyEvents implements StatusUpdateListener {
 		}
 		
 		// call update the Kiosk heath file
-		logger.info("Receipt_Printer KioskHeathFile :: "+machinestatus);
+		logger.debug("Receipt_Printer KioskHeathFile :: "+machinestatus);
 		new VedioConference().updateKioskHeathFile(machinestatus,"Receipt_Printer");
 		
 	}

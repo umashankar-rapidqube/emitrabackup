@@ -1168,6 +1168,9 @@
 	<script type="text/javascript" src="js/app-inner.js"></script>
 	
 	<script src="js/dist/jquery.validate.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 
 </body>
 

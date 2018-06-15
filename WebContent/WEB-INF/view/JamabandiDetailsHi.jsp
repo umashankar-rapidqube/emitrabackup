@@ -59,7 +59,7 @@
 					</div>
 					
 					<form id="spd1">
-						<input type="hidden" name="langCode" id="langCode" value="0">
+						<input type="hidden" name="langCode" id="langCode" value="1">
 						<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
 					</form>
 					

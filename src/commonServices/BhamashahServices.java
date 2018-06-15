@@ -49,6 +49,9 @@ public class BhamashahServices implements Runnable{
 	private String requestUrl = null;
 	private String methodName = null;
 	BufferedReader in;
+	final int MAX_SIZE = 200000;
+	OutputStreamWriter writer;
+	StringWriter writer1;
 	
 	public BhamashahServices() {}
 	
@@ -115,13 +118,23 @@ public class BhamashahServices implements Runnable{
 	         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	         
 	         //write the content into string format
-	         StringWriter writer = new StringWriter();
+	         writer1 = new StringWriter();
 	         transformer.transform(new DOMSource(doc), new StreamResult(writer));
-	         output = writer.getBuffer().toString();
+	         output = writer1.getBuffer().toString();
 	      } catch (Exception e) {
 	    	  logger.error("BhamashahServices, Exception in getXmlForAadharInfo : " +e.getMessage());
 	         /*e.printStackTrace();*/
 	      }
+		finally
+		{
+			try {	
+			writer1.close();
+			}
+			catch (IOException e) {
+				logger.error("IO Exception");
+		}
+		}
+		
 		
 		return output;
 	}
@@ -143,9 +156,9 @@ public class BhamashahServices implements Runnable{
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+			writer = new OutputStreamWriter(connection.getOutputStream());
 			writer.write(docXml);
-			writer.close();
+			//writer.close();
 			
 			int responseCode = connection.getResponseCode();
 			logger.debug(responseCode);
@@ -153,9 +166,12 @@ public class BhamashahServices implements Runnable{
 			/*System.out.println(responseCode);
 			System.out.println(connection.getResponseMessage());*/
 			if(responseCode!=200) {
-				logger.info("getResponseString, response code : "+responseCode+" due to API server error");
+				logger.info("getResponseString, response code : due to API server error");
+				logger.debug("getResponseString, response code : "+responseCode+" due to API server error");
 			}else {
-				logger.info("getResponseString, response code : "+responseCode);
+				logger.info("getResponseString, response code : ");
+				logger.debug("getResponseString, response code : "+responseCode);
+				
 				
 		//		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream() , StandardCharsets.UTF_8));
 				/*String inputLine;
@@ -164,7 +180,7 @@ public class BhamashahServices implements Runnable{
 					responseString.append(inputLine);
 				}
 				in.close();*/
-				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));	
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8),MAX_SIZE);	
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					responseString.append(inputLine);
 				}		
@@ -184,6 +200,7 @@ public class BhamashahServices implements Runnable{
 		{
 			try {
 			in.close();
+			writer.close();
 			}
 			catch (IOException e) {
 				logger.error("IO Exception");
@@ -210,18 +227,19 @@ public class BhamashahServices implements Runnable{
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+			writer = new OutputStreamWriter(connection.getOutputStream());
 			writer.write(requestJson.toString());
-			writer.close();
+			//writer.close();
 			
 			int responseCode = connection.getResponseCode();
 			if(responseCode!=200) {
-				logger.info("getResponseStringForDisability, response code : "+responseCode+" due to API server error");
+				logger.info("getResponseStringForDisability, response code : due to API server error");
+				logger.debug("getResponseStringForDisability, response code : "+responseCode+" due to API server error");
 			}else {
-				logger.info("getResponseStringForDisability, response code : "+responseCode);
-				
+				logger.info("getResponseStringForDisability, response code : ");
+				logger.debug("getResponseStringForDisability, response code : "+responseCode);
 
-				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8),2048);	
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8),MAX_SIZE);	
 		/*		String inputLine;
 		
 				while ((inputLine = in.readLine()) != null) {
@@ -247,6 +265,7 @@ public class BhamashahServices implements Runnable{
 		{
 			try {
 			in.close();
+			writer.close();
 			}
 			catch (IOException e) {
 				logger.error("IO Exception");
@@ -441,7 +460,7 @@ public class BhamashahServices implements Runnable{
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
 			
-			in = new BufferedReader(new InputStreamReader(connection.getInputStream() , StandardCharsets.UTF_8));
+			in = new BufferedReader(new InputStreamReader(connection.getInputStream() , StandardCharsets.UTF_8),MAX_SIZE);
 			StringBuffer buffer = new StringBuffer();
 			
 			/*StringBuffer buffer = new StringBuffer();
@@ -480,7 +499,7 @@ public class BhamashahServices implements Runnable{
 			catch (IOException e) {
 				logger.error("IO Exception");
 		}
-		}
+	}
 		
 		return responseJson;
 	}
@@ -583,7 +602,7 @@ public class BhamashahServices implements Runnable{
 					res.append(line);
 				}*/
 				
-				in = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
+				in = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()),MAX_SIZE);
 				
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					res.append(inputLine);
@@ -640,7 +659,7 @@ public class BhamashahServices implements Runnable{
 				in.close();
 				*/
 
-				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));	
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8),MAX_SIZE);	
 		
 				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
 					responseString.append(inputLine);

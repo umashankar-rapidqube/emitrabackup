@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -30,6 +31,9 @@ public class RevenueCaseServiceImpl implements RevenueCaseService {
 
 	@Autowired
 	RevenueCaseDao revenueCaseDao;
+	final int MAX_SIZE = 200000;
+	InputStream in;
+	FileOutputStream fos;
 	
 	static final Logger logger = Logger.getLogger(RevenueCaseServiceImpl.class);
 	private static final String REQUESTURL = "http://rcms.landrevenue.rajasthan.gov.in/rcmsscripts/ASBIViewRest.dll/datasnap/rest/TASBIViewREST/getiview";
@@ -197,7 +201,7 @@ public class RevenueCaseServiceImpl implements RevenueCaseService {
 			} else {
 				logger.debug("getRevenueMasterData, response code : " + responseCode);
 				
-				Reader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+				Reader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"),MAX_SIZE);
 				for (int c; (c = in.read()) >= 0;) {
 					responseString.append((char) c);
 				}
@@ -243,15 +247,15 @@ public class RevenueCaseServiceImpl implements RevenueCaseService {
 			f = new File(directory + File.separator + fileName + ".pdf");
 			if (!f.exists())
 				f.createNewFile();
-			InputStream in = new BufferedInputStream(url.openStream());
-			FileOutputStream fos = new FileOutputStream(f);
+			in = new BufferedInputStream(url.openStream());
+			fos = new FileOutputStream(f);
 			int length = -1;
 			byte[] buffer = new byte[1024];
 			while ((length = in.read(buffer)) > -1) {
 				fos.write(buffer, 0, length);
 			}
-			fos.close();
-			in.close();
+			//fos.close();
+			//in.close();
 			if (f.exists()) {
 				directory = "http://localhost:" + req.getLocalPort() + "/revenuePdf/" + fileName + ".pdf";
 				logger.debug("downloadFile, file URL : " + directory + " &&   file Size : " + f.length());
@@ -262,6 +266,14 @@ public class RevenueCaseServiceImpl implements RevenueCaseService {
 			responseJson.put("pdfUrl", "");
 			responseJson.put("fileSize", "0");
 		}
+		finally	{
+			try {
+				fos.close();
+				in.close();}
+			catch (IOException e) {		
+		}
+		}        	
+
 		logger.debug("downloadFile, response for downloaded dile : " + responseJson);
 		return responseJson;
 	}

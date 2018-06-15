@@ -36,24 +36,24 @@ public class EncryptDecryptServiceImpl implements EncryptDecryptService {
 		String decryptResponse = service.getPOSTResponse(requestMethod, methodName, encryptDetails, "toBeDecrypt",
 				decryptURL);
 		List<Bill> details = new ArrayList<Bill>();
-		logger.info(methodName + ", SERVICE PROVIDER ID :" + bill.getServiceProviderID());
-		logger.info(methodName + ", API Result:" + decryptResponse);
+		logger.debug(methodName + ", SERVICE PROVIDER ID :" + bill.getServiceProviderID());
+		logger.debug(methodName + ", API Result:" + decryptResponse);
 
 		switch (bill.getServiceProviderID()) {
 		case 1214:
-			logger.info(methodName + ", AIRTEL BACKTOBACK API Result:" + decryptResponse);
+			logger.debug(methodName + ", AIRTEL BACKTOBACK API Result:" + decryptResponse);
 			details = encryptDecryptDAO.getAirtelDetails(decryptResponse, bill);
 			break;
 		case 1220:
-			logger.info(methodName + ", IDEA BACKTOBACK API Result:" + decryptResponse);
+			logger.debug(methodName + ", IDEA BACKTOBACK API Result:" + decryptResponse);
 			details = encryptDecryptDAO.getIdeaDetails(decryptResponse, bill);
 			break;
 		case 1219:
-			logger.info(methodName + ", Vodaphone BACKTOBACK API Result:" + decryptResponse);
+			logger.debug(methodName + ", Vodaphone BACKTOBACK API Result:" + decryptResponse);
 			details = encryptDecryptDAO.getVodafoneDetails(decryptResponse, bill);
 			break;
 		case 2575:
-			logger.info(methodName + ", BSNL BACKTOBACK API Result:" + decryptResponse);
+			logger.debug(methodName + ", BSNL BACKTOBACK API Result:" + decryptResponse);
 			details = encryptDecryptDAO.getBsnlDetails(decryptResponse, bill);
 			break;
 		}
@@ -72,8 +72,8 @@ public class EncryptDecryptServiceImpl implements EncryptDecryptService {
 				decryptURL);
 
 		List<Discom> discomdetail = new ArrayList<Discom>();
-		logger.info(methodName + ", Discom BACKTOBACK API Result:" + discomDecryptResponse);
-		logger.info(methodName + ", SERVICE PROVIDER ID :" + bill.getServiceProviderID());
+		logger.debug(methodName + ", Discom BACKTOBACK API Result:" + discomDecryptResponse);
+		logger.debug(methodName + ", SERVICE PROVIDER ID :" + bill.getServiceProviderID());
 		discomdetail = encryptDecryptDAO.getDiscomDetails(discomDecryptResponse, bill, discom);
 
 		return discomdetail;
@@ -89,8 +89,8 @@ public class EncryptDecryptServiceImpl implements EncryptDecryptService {
 		String requestMethod = "POST";
 		String phedDecryptResponse = service.getPOSTResponse(requestMethod, methodName, encryptDetails, "toBeDecrypt",
 				decryptURL);
-		logger.info("sendPostForPhedDecryptData, PHED BACKTOBACK API Details : " + phedDecryptResponse.toString());
-		logger.info("sendPostForPhedDecryptData, SERVICE PROVIDER ID :" + bill.getServiceProviderID());
+		logger.debug("sendPostForPhedDecryptData, PHED BACKTOBACK API Details : " + phedDecryptResponse.toString());
+		logger.debug("sendPostForPhedDecryptData, SERVICE PROVIDER ID :" + bill.getServiceProviderID());
 		pheddetail = encryptDecryptDAO.getPhedDetails(phedDecryptResponse, bill, ph);
 		return pheddetail;
 	}

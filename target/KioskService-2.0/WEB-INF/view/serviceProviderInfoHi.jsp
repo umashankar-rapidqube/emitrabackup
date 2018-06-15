@@ -67,13 +67,13 @@
 										<h1>
                                                                                                                                                       कृपया  <span id="serviceName"></span> बिल के लिए अपनी जानकारी दर्ज करें
 											</h1>
+										<form id="spd">
+	                                    	<input type="hidden" name="langCode" id="langCode1" value="1">
+											<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+										</form>
 										<form id="bill_details">
-											<input type="hidden" name="serviceProviderName"
-												id="serviceProviderName"
-												value="${serviceProvider.serviceProviderName}" /> <input
-												type="hidden" name="serviceProviderID"
-												id="serviceProviderID" value="0" />
-											
+											<input type="hidden" name="serviceProviderName" id="serviceProviderName" value="${serviceProvider.serviceProviderName}" />
+											<input type="hidden" name="serviceProviderID" id="serviceProviderID" value="0" />
 											<input type="hidden" name="langCode" id="langCode" value="1" />
 											
 											<div class="feildone">
@@ -163,8 +163,8 @@
 								</div>
 							</div>
 							<div class="button_div">
-								<a href="serviceproviderHi"> <img
-									src="img/new/backhindi.png" alt="" />
+								<a href="javascript:void(0);" onclick="getSP('Bill_Postpaid')" >
+									<img src="img/new/backhindi.png" alt="" />
 								</a>
 							</div>
 						</div>
@@ -185,10 +185,18 @@
 	<script type="text/javascript" src="js/app.js"></script>
 	<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 
 	<script type="text/javascript">
-	
-	 $("#bsnlType").change(function(){
+		function getSP(pageName) {
+	    	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd").action = "utilityBills";
+			document.getElementById("spd").method = "post";
+			$("#spd").submit();
+		}
+		
+	 	$("#bsnlType").change(function(){
 	     	var bsnlType = this.value;	   
 			if(bsnlType == "landline"){						
 				$("#contacttext").text("लैंडलाइन*");
@@ -220,8 +228,6 @@
 			$("#serviceBill").on('click', function() {
 				$("#serviceProviderID").val("${serviceId}");
 				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-				//	alert("serviceId  :: "+$("#serviceProviderID").val());
-				//	alert("billMobileNo : "+$("#billMobileNo").val()+" billEmail : "+$("#billEmail").val());
 				var contact = $.trim($("#billMobileNo").val());
 				var emailid = $.trim($("#billEmail").val());
 				var bsnlType = $('#bsnlType :selected').val();
@@ -236,56 +242,14 @@
 					}
 				}
 
-			/* 	if (contact == '') {
-					$("#errMobile")	.html('<p style="color:red;float: left;">* मोबाइल नंबर दर्ज करें</p>');
+				var bsnlTypeMsg = bsnlType=="landline"?"लैंडलाइन":"मोबाइल";
+				
+				if(!validate(contact, bsnlTypeMsg)){
 					$("#billMobileNo").focus();
 					return false;
-				} */
-
-				if(bsnlType == "landline"){		
-					if (contact == '') {
-						$("#errMobile").html('<p style="color:red; font-size:13px;float: left;">* लैंडलाइन  नंबर दर्ज करें</p>');
-						$("#billMobileNo").focus();
-						//setTimeout(function(){$("#errMobile").html('')}, 3000);
-						return false;
-					}
-					if (contact != '') {
-						if (!$.isNumeric(contact)) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* मान्य  लैंडलाइन  नंबर दर्ज करें</span>");
-							return false;
-						} else if (contact.length != 10) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* मान्य 10 अंकों   का  लैंडलाइन  नंबर  दर्ज करें .</span>");
-							return false;					
-						}
-					}
-				}else{
-					if (contact == '') {
-						$("#errMobile").html('<p style="color:red;float: left;">* मोबाइल नंबर दर्ज करें</p>');
-						$("#billMobileNo").focus();
-						//setTimeout(function(){$("#errMobile").html('')}, 3000);
-						return false;
-					}
-					if (contact != '') {
-						if (!$.isNumeric(contact)) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* मान्य  मोबाइल नंबर दर्ज करें</span>");
-							return false;
-						} else if (contact.length != 10) {
-							$("#billMobileNo").focus();
-							$("#errMobile").html("<span style='color:red'>* मान्य 10 अंकों   का  मोबाइल नंबर  दर्ज करें .</span>");
-							return false;					
-						}
-					}
 				}
 				
-				
-				
 				if (emailid == '') {
-					/* $("#billEmail").focus();
-					$("#errEmail").html("<span style='color:red'>* ईमेल आईडी  दर्ज करें</span>");
-					return false; */
 					$("#billEmail").val('helpdesk.emitra@rajasthan.gov.in');
 				}
 				
@@ -295,6 +259,24 @@
 				$("#bill_details").submit();
 			})
 		});
+		
+		function validate(contact, msg){
+			 if (contact == '') {
+				$("#errMobile").html('<p style="color:red;float: left; font-size:13px;float: left;">* मान्य  '+msg+' नंबर दर्ज करें</p>');
+				return false;
+			}
+			if (contact != '') {
+				if (!$.isNumeric(contact)) {
+					$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* मान्य  "+msg+" नंबर दर्ज करें </span>");
+					return false;
+				} else if (contact.length != 10) {
+					$("#errMobile").html("<span style='color:red; font-size:13px;float: left;'>* मान्य 10 अंकों   का  "+msg+" नंबर  दर्ज करें </span>");
+					return false;					
+				}
+			}
+			return true;
+		}
+		
 	</script>
 
 

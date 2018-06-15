@@ -40,7 +40,7 @@ public class DisabilityDAOImpl implements DisabilityDAO {
             queryDetails.addQueryParams(9, disabilityinfo.getSerialNo());
             
             DBServiceResponse serviceResponse = dbHTTPUtils.pullDataFromDBApiServer(queryDetails);
-            logger.info("saveDisabilityCertificateDetails , Response:" + serviceResponse.getStatus());
+            logger.debug("saveDisabilityCertificateDetails , Response:" + serviceResponse.getStatus());
             if (HttpStatus.SC_OK == serviceResponse.getStatus()) {
                 JSONArray resultSet = serviceResponse.getJsonArray();
                 if (null != resultSet && resultSet.length() > 0) {

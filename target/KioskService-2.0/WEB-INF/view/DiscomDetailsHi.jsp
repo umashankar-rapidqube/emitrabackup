@@ -63,7 +63,7 @@
 							<div class="container main_row">
 								<div class="row">
 									<div class="billmidmain">
-										<h1 class="">आपका  बिजली वितरण विवरण </h1>
+										<h1 class="">आपका ${infobill.serviceProviderName} विवरण </h1>
 									    <div style="overflow-x:auto;">
 										<table class="table">
 											<thead>
@@ -72,7 +72,6 @@
 													<th>नामe</th>
 													<th>चेक की नियत तिथि</th>
 													<th>बिल वर्ष</th>
-													<th>संदेश</th>
 													<th>बिल क्रमांक</th>
 													<th>खाता</th>
 													<th>बिल माह</th>
@@ -92,7 +91,6 @@
 													<td >${fm.name}</td>
 													<td >${fm.chequeDueDate}</td>
 													<td >${fm.billYear}</td>
-													<td >${fm.message}</td>
 													<td >${fm.billNo}</td>
 													<td >${fm.account_number}</td>
 													<td >${fm.billMonth}</td>
@@ -108,6 +106,10 @@
 
 											</tbody>
 										</table>
+										<form id="spd">
+											<input type="hidden" id="serviceProviderID1" name="serviceProviderID" value="${infobill.serviceProviderID}" >
+											<input type="hidden" id="serviceProviderName1" name="serviceProviderName" value="${infobill.serviceProviderName}" >
+										</form>
 										<form id="click">
 											<input type="hidden" id="billActualAmount" name="billActualAmount"  value="${infobill.billActualAmount}">
 											<input type="hidden" id="billAmount" name="billAmount" value="${infobill.billAmount}" >
@@ -170,17 +172,25 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	  <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
 	  <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	  
 
 	
  
  <script>
-		function clicktopay() {
-			$('#loading').show();
-			document.getElementById('click').action = "clickToPay";
-			document.getElementById('click').method = "POST";
-			document.getElementById('click').submit();
-		}
-	</script>
+ 	function getSP(pageName) {
+		document.getElementById("spd").action = "discom";
+		document.getElementById("spd").method = "post";
+		$("#spd").submit();
+	}
+	function clicktopay() {
+		$('#loading').show();
+		document.getElementById('click').action = "clickToPay";
+		document.getElementById('click').method = "POST";
+		document.getElementById('click').submit();
+	}
+</script>
 </body>
 
 </html>

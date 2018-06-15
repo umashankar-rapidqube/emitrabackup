@@ -972,7 +972,7 @@ public class BillDAOImpl implements BillDAO {
             queryDetails.addQueryParams(2, machineId);
             
             DBServiceResponse serviceResponse = dbHTTPUtils.pullDataFromDBApiServer(queryDetails);
-            logger.info("Response status of getSsoId While checking for autologin:" + serviceResponse.getStatus());
+            logger.debug("Response status of getSsoId While checking for autologin:" + serviceResponse.getStatus());
             if (HttpStatus.SC_OK == serviceResponse.getStatus()) {
                 JSONArray resultSet = serviceResponse.getJsonArray();
                 if (null != resultSet && resultSet.length() > 0) {
@@ -998,7 +998,7 @@ public class BillDAOImpl implements BillDAO {
             queryDetails.addQueryParams(3, paymentCode);
 
             DBServiceResponse serviceResponse = dbHTTPUtils.pushDataToDBApiServer(queryDetails);
-            logger.info("Response status of saveMachineAuth:" + serviceResponse.getStatus());
+            logger.debug("Response status of saveMachineAuth:" + serviceResponse.getStatus());
 
         } catch (Exception ex) {
             logger.error("BillDAOImpl, Caught an exception while inserting UntrackedEmitraTransaction !!", ex);

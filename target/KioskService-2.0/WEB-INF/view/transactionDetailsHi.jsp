@@ -117,10 +117,16 @@
 								</div>
 
 							</div>
-
+							
+							<form id="spd">
+								<input type="hidden" name="langCode" id="langCode" value="1">
+								<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+							</form>
 
 							<div class="button_div">
-								<a href="transactionservicehi1" class="panel"> <img src="img/new/backhindi.png"></a>
+								<a href="javascript:void(0);" onclick="getSP('tokenVerificationHi')" class="panel">
+									<img src="img/new/backhindi.png">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -133,7 +139,16 @@
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	  <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
 	  <script type="text/javascript" src="js/app-inner.js"></script>
-
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	  
+		<script type="text/javascript">
+			function getSP(pageName) {
+				$("#serviceProviderPage").val(pageName);
+				document.getElementById("spd").action = "utilityBills";
+				document.getElementById("spd").method = "post";
+				document.getElementById('spd').submit();
+			}
+		</script>
 
 </body>
 

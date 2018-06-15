@@ -27,7 +27,11 @@ import model.DisabilityCertificateInfo;
 @Service("disabilityService")
 public class DisabilityServiceImpl implements DisabilityService {
 	
-	BufferedReader in;
+	BufferedReader br;
+	InputStream in;
+	FileOutputStream fos;
+	
+	final int MAX_SIZE = 200000;
 	
 	@Autowired
 	DisabilityDAO disabilityDAO;
@@ -107,9 +111,9 @@ public class DisabilityServiceImpl implements DisabilityService {
 				in.close();
 				*/
 				
-				in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				br = new BufferedReader(new InputStreamReader(con.getInputStream()),MAX_SIZE);
 				StringBuffer response = new StringBuffer();				
-				for (String inputLine = in.readLine(); inputLine != null; inputLine = in.readLine()) {
+				for (String inputLine = br.readLine(); inputLine != null; inputLine = br.readLine()) {
 					response.append(inputLine);
 				}				
 
@@ -161,6 +165,8 @@ public class DisabilityServiceImpl implements DisabilityService {
 
 	public HashMap<String, String> downloadfile(HashMap<String, String> map, String aadhaar, String directory,
 			HttpServletRequest req) throws IOException {
+		
+		try {
 		URL url = new URL(map.get("URL"));
 		directory = directory + File.separator + "certificates";
 		//method call for avoid path traversal
@@ -180,15 +186,15 @@ public class DisabilityServiceImpl implements DisabilityService {
 		f = new File(directory + File.separator + aadhaar + "_disability.pdf");
 		if (!f.exists())
 			f.createNewFile();
-		InputStream in = url.openStream();
-		FileOutputStream fos = new FileOutputStream(f);
+		in = url.openStream();
+		fos = new FileOutputStream(f);
 		int length = -1;
 		byte[] buffer = new byte[1024];// buffer for portion of data from connection
 		while ((length = in.read(buffer)) > -1) {
 			fos.write(buffer, 0, length);
 		}
-		fos.close();
-		in.close();
+		//fos.close();
+		//in.close();
 		if (f.exists()) {
 			directory = "http://localhost:" + req.getLocalPort()
 					+ "/KioskService/certificatecontainer.jsp?urlOfPrinting=http://localhost:" + req.getLocalPort()
@@ -199,7 +205,18 @@ public class DisabilityServiceImpl implements DisabilityService {
 			map.put("ERROR_MESSAGE", "File not download");
 		}
 		map.put("URL", directory);
-		return map;
+		}
+
+		catch (Exception e)	{			
+		}	
+		finally	{
+			try {
+				fos.close();
+				in.close();}
+			catch (IOException e) {		
+		}
+		}        	
+    	return map;
 	}
 	//method for path traversal
 	public void failIfDirectoryTraversal(String relativePath)

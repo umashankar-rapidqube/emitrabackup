@@ -39,6 +39,8 @@ import utils.TimeUtils;
 public class LocalLogSyncer {
 
 	BufferedReader bufferedReader;
+	final int MAX_SIZE = 200000;
+	PrintWriter printWriter;
 	
     @Value("${local.log.file.prefix}")
     private String logFilePrefix;
@@ -168,7 +170,7 @@ public class LocalLogSyncer {
     }
 
     public void writeToLocalLogs(String emitraTransactionId, String requestId, String serviceId, String amount) throws Exception {
-        logger.info("transactionId: " + emitraTransactionId + ", requestId: " + requestId + ", serviceId: " + serviceId + ", amount: " + amount);
+        logger.debug("transactionId: " + emitraTransactionId + ", requestId: " + requestId + ", serviceId: " + serviceId + ", amount: " + amount);
         if (StringUtils.isBlank(emitraTransactionId) || StringUtils.isBlank(requestId)) {
             throw new Exception("Either transactionId OR requestId IS NULL !!");
         }
@@ -203,7 +205,7 @@ public class LocalLogSyncer {
 
             File[] files = localLogDir.listFiles();
             for (File file : files) {
-                logger.info("processing file[" + file.getName() + "]");
+                logger.debug("processing file[" + file.getName() + "]");
                 if (file.isDirectory() && deleteDirectory(file)) {
                     continue;
                 }
@@ -238,7 +240,7 @@ public class LocalLogSyncer {
 
                 try {
                    
-                   bufferedReader = new BufferedReader(new FileReader(file));				
+                   bufferedReader = new BufferedReader(new FileReader(file),MAX_SIZE);				
                     List<String> transactionDetails = new ArrayList<>();
                     for (String inputLine = bufferedReader.readLine(); inputLine != null; inputLine = bufferedReader.readLine()) {
                     	transactionDetails.add(inputLine);
@@ -266,7 +268,7 @@ public class LocalLogSyncer {
                             continue;
                         }
 
-                        logger.info("Reverting transaction[" + transactionStr + "] on emitra");
+                        logger.debug("Reverting transaction[" + transactionStr + "] on emitra");
                         if (StringUtils.isBlank(billDetails.getLocalLogStatus())) {
                             if (null == Login.SSOID) {
                                 billDetails.setSsoID("0");
@@ -322,13 +324,13 @@ public class LocalLogSyncer {
                     if (transactionDetails.isEmpty()) {
                         file.delete();
                     } else {
-                        PrintWriter printWriter = new PrintWriter(new FileWriter(file));
+                        printWriter = new PrintWriter(new FileWriter(file));
                         for (String transactionDetail : transactionDetails) {
                             printWriter.write(transactionDetail + Constants.NEW_LINE);
                         }
 
                         printWriter.flush();
-                        printWriter.close();
+                        //printWriter.close();
                     }
                 } catch (Exception ex) {
                 	logger.error("LocalLogSyncer, Exception in scheduleSyncLocalLogs :"+ex.getMessage());
@@ -337,6 +339,7 @@ public class LocalLogSyncer {
         		finally
         		{
         			try {
+        				 printWriter.close();
         			    bufferedReader.close();
         			}
         			catch (IOException e) {

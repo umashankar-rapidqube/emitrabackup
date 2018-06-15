@@ -68,12 +68,11 @@
 											<div class="twobtn">
 												<button type="button" id="loginbtn" 
 													class="btn btn-default getone griefrom" name="signup"
-													value="Log In" >Click Emitra Plus SSO Login</button>
+													value="Log In" >Click Here To Begin</button>
 											</div>
 										</div>
 									</div>
 								</div>
-								
 							</div>
 							
 							<div class="container main_row" id="showmsg" style="width: 50%;display: none; ">
@@ -87,10 +86,9 @@
 
 							<div class="col-md-12 versionbox">
 								<h4>
-									Version 2.0
+									Version 3.0
 								</h4>
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -98,58 +96,74 @@
 		</div>
 	</div>
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg versionmodel">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Please make a note of the following points for Update of E-mitra+ Kiosk Software.</h4>
-        </div>
-        <div class="modal-body">
-         <div class="col-md-12 versionins">
-         <h4>Please follow these steps for updating the Emitra+ Kiosk software.</h4>
-         
-         
-                                               <ul>
-	<li><span class="step">Step 1:-</span>  
-	<span class="stepleft">Please click on the link that is shared to you by your respected "DLO's". Now make a note of these steps  and then click on Exit button to exit from the Kiosk Mode and follow the further steps.</span></li>
-	<li><span class="step">Step 2:-</span>  
-	<span class="stepleft"> Open the shared google drive link in browser for downloading the latest version. </span></li>
-	
-	<li><span class="step">Step 3:-</span>
-	<span class="stepleft">A google drive window will appear with Download button. Click on "Download".</span></li>
-	
-	<li>
-		<span class="step">Step 4:-</span> <span class="stepleft"> A new tab will open with (Download Anyway).Click on "Download Anyway".</span></li>
-	
-	<li><span class="step">Step 5:-</span> <span class="stepleft">Let it download successfully.</span></li>
-	<li><span class="step">Step 6:-</span> <span class="stepleft">You will have "KioskUpdateSetup.rar" in your "Downloads".</span></li>
-	<li><span class="step">Step 7:-</span> <span class="stepleft">Right click on the "KioskUpdateSetup.rar"  and choose extract to "KioskUpdateSetup.rar\ option" and setup will be extracted in the "KioskUpdateSetup.rar" folder in 'Downloads'.</span></li>
-    <li><span class="step">Step 8:-</span><span class="stepleft">Go in "KioskUpdateSetup"-->click on "ServerUpdate.bat" file.(A cmd will run and close automatically after few seconds.)</span></li>
-<li>
-<span class="step">Step 9:-</span><span class="stepleft">You are done with the Updation process.</span></li>
-<li>Note : If still any problem occurs in installation process, you can contact to <b>Naveen Kumar Yadav</b> on his <b> Email ID - yaphets.fear@gmail.com </b> or on the <b>Mobile No - 7976596290</b>
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog modal-lg versionmodel">
 
- </li>
-</ul>
-                                            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button"  id="close" class="btn btn-default" >Exit</button>                       
-      
-        </div>
-      </div>
-      
-    </div>
-  </div>
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Please make a note of the following
+						points for Update of E-mitra+ Kiosk Software.</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12 versionins">
+						<h4>Please follow these steps for updating the Emitra+ Kiosk
+							software.</h4>
+						<ul>
+							<li><span class="step">Step 1:-</span> <span
+								class="stepleft">Please click on the link that is shared
+									to you by your respected "DLO's". Now make a note of these
+									steps and then click on Exit button to exit from the Kiosk Mode
+									and follow the further steps.</span></li>
+							<li><span class="step">Step 2:-</span> <span
+								class="stepleft"> Open the shared google drive link in
+									browser for downloading the latest version. </span></li>
+							<li><span class="step">Step 3:-</span> <span
+								class="stepleft">A google drive window will appear with
+									Download button. Click on "Download".</span></li>
+							<li><span class="step">Step 4:-</span> <span
+								class="stepleft"> A new tab will open with (Download
+									Anyway).Click on "Download Anyway".</span></li>
+							<li><span class="step">Step 5:-</span> <span
+								class="stepleft">Let it download successfully.</span></li>
+							<li><span class="step">Step 6:-</span> <span
+								class="stepleft">You will have "KioskUpdateSetup.rar" in
+									your "Downloads".</span></li>
+							<li><span class="step">Step 7:-</span> <span
+								class="stepleft">Right click on the
+									"KioskUpdateSetup.rar" and choose extract to
+									"KioskUpdateSetup.rar\ option" and setup will be extracted in
+									the "KioskUpdateSetup.rar" folder in 'Downloads'.</span></li>
+							<li><span class="step">Step 8:-</span><span class="stepleft">Go
+									in "KioskUpdateSetup"-->click on "ServerUpdate.bat" file.(A cmd
+									will run and close automatically after few seconds.)</span></li>
+							<li><span class="step">Step 9:-</span><span class="stepleft">You
+									are done with the Updation process.</span></li>
+							<li>Note : If still any problem occurs in installation
+								process, you can contact to <b>Naveen Kumar Yadav</b> on his <b>
+									Email ID - yaphets.fear@gmail.com </b> or on the <b>Mobile No -
+									7976596290</b>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="close" class="btn btn-default">Exit</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 	<script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
 	<script>
 	
 		$( "#close" ).click(function() {				
@@ -157,7 +171,20 @@
 		});
 	
 		$( "#loginbtn" ).click(function() {
-		  	window.location.href="https://sso.rajasthan.gov.in/signin?ru=http://localhost:1000/KioskService/login";
+			var xhttp = new XMLHttpRequest();
+	  		xhttp.onreadystatechange = function() {
+	  			if (this.readyState == 4 && this.status == 200) {
+		  			var flagExist = this.responseText;
+		  			if(flagExist == "true"){
+		  				window.location.href = "index";
+		  			}else{
+		  				window.location.href="https://sso.rajasthan.gov.in/signin?ru=http://localhost:1000/KioskService/login";
+		  			}
+	  			}
+	  		};
+	  		xhttp.open("GET", "autologin", true);
+		  	xhttp.send();
+		  	
 		});
 	
 	function versionCheck() {

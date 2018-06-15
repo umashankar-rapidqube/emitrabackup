@@ -43,11 +43,11 @@ public class ReceiptPrint {
 			}
 			String trnsDate = convertDate(String.valueOf(recieptData.get("EMITRATIMESTAMP")) , "yyyyMMddHHmmssSSS" , "yyyy-MM-dd HH:mm:ss.SSS");
 
-			logger.info("BankRefNumber::" + bankRefNumber + " trnsid:::" + trnsid + " mobile::"
+			logger.debug("BankRefNumber::" + bankRefNumber + " trnsid:::" + trnsid + " mobile::"
 					+ consumerKey + " acutual::" + actualAmount + " payable::" + payableAmount + " Date::" + trnsDate
 					+ " serviceProviderName::" + sname);
 
-			printData = "\r\n TranscationId:" + trnsid;
+			printData = "\r\n TransactionId:" + trnsid;
 			
 			if(serviceType.equals("utility")) {
 				printData += "\r\n Name:" + consumerName;
@@ -63,13 +63,13 @@ public class ReceiptPrint {
 			
 			printData +=  "\r\n Date:" + trnsDate + "\r\n\r\n\r\n\r\n\r\n";
 			
-			logger.info("Transcation print details ::" + printData);
+			logger.debug("Transcation print details ::" + printData);
 			
 			absoluteDiskPath = request.getSession().getServletContext().getRealPath("/resources/img");
 			//failIfDirectoryTraversal(absoluteDiskPath);
 			File file = new File(absoluteDiskPath, "javapos.bmp");
 			printLogoPath = file.getCanonicalPath();
-			logger.info("Receipt_Printer Logo Path :: " + printLogoPath + " absoluteDiskPath : " + absoluteDiskPath);
+			logger.debug("Receipt_Printer Logo Path :: " + printLogoPath + " absoluteDiskPath : " + absoluteDiskPath);
 
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block

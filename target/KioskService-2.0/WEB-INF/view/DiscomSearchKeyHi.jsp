@@ -53,14 +53,21 @@
                             </div>
                         </div>
                     </div>
+                    <c:set var="serviceId" value="${serviceProvider.serviceProviderID}" />
                     <div class="fourservices">
                         <div class="innermid">
                             <div class="container main_row">
                                 <div class="row">
                                
                                     <div class="billmidmain">
-                                        <h1>कृपया  बिजली बिल के लिए  विवरण दर्ज करें।</h1>
-                                         <form id="discom_details">
+                                        <h1>कृपया ${serviceProvider.serviceProviderName} बिजली बिल के लिए  विवरण दर्ज करें।</h1>
+                                        <form id="spd">
+	                                    	<input type="hidden" name="langCode" id="langCode1" value="1">
+											<input type="hidden" name="serviceProviderPage" id="serviceProviderPage" />
+										</form>
+										<form id="discom_details">
+                                         	<input type="hidden" name="serviceProviderName" id="serviceProviderName" value="${serviceProvider.serviceProviderName}" />
+											<input type="hidden" name="serviceProviderID" id="serviceProviderID" value="${serviceProvider.serviceProviderID}" />
                                         <div class="feildone" style="text-align:center">
                                             <div class="col-md-6 col-md-offset-3">
                                                 <div class="col-md-4">
@@ -72,7 +79,7 @@
                                                     <div class="billidright">
                                                         <div class="form-group">
                                                             <input type="text" class="form-control" name="k_Number" id="k_Number" required="required" autocomplete="off" 
-                                                             placeholder="बिजली के.क्रमांक  दर्ज करें">
+                                                             placeholder="${serviceProvider.serviceProviderName} के.क्रमांक  दर्ज करें">
                                                              <div class="billidright" id="errKNumber">	</div>
                                                         </div>
                                                     </div>
@@ -133,8 +140,9 @@
                          
                             </div>
                              <div class="button_div">
-                                <a href="serviceproviderHi" class="panel">
-                                    <img src="img/new/backhindi.png" alt=""></a>
+                                <a href="javascript:void(0);" onclick="getSP('Bill_Electricity')" >
+									<img src="img/new/backhindi.png" alt="" />
+								</a>
                             </div>
                         </div>
                     </div>
@@ -148,7 +156,16 @@
     <script	type="text/javascript" src="js/jquery.min.js"></script><script type="text/javascript"  src="js/bootstrap.min.js"></script>
     <script type="text/javascript"  src="js/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="js/app-inner.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+    
   	<script type="text/javascript">
+	  	function getSP(pageName) {
+	    	$("#serviceProviderPage").val(pageName);
+			document.getElementById("spd").action = "utilityBills";
+			document.getElementById("spd").method = "post";
+			$("#spd").submit();
+		}
   	$(function() {
 		$("#checkForm").on('click',function() {
 			//alert("dfhg")

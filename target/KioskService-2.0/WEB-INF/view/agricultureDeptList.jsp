@@ -238,6 +238,9 @@
 	<script type="text/javascript" src="js/jquery.scrollTo.js"></script>
 	<script type="text/javascript" src="js/app-inner.js"></script>
 	<script type="text/javascript" src="js/slick.js"></script>
+	
+	<script type="text/javascript" src="js/KioskServices/BackButtonDisable.js"></script>
+	
 
 </body>
 

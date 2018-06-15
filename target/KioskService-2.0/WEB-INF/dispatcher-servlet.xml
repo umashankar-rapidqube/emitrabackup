@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
-	<context:component-scan base-package="controller, dao,service" />
+	<context:component-scan base-package="controller, dao, locallogs, service, utils" />
 
    	<context:property-placeholder location="classpath:jdbc.properties" />
    	
@@ -28,7 +28,7 @@
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven />
 	<mvc:default-servlet-handler/>
-    <mvc:annotation-driven />
+    <task:annotation-driven/>
     
     <!--for resource mappping -->
 	<mvc:resources mapping="/resources/**"  location="/resources/" /> 
